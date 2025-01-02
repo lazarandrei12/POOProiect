@@ -1,6 +1,6 @@
 namespace Program.clase;
 
-public class suv : car
+public class masina_standard
 {
     
 }
