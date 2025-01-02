@@ -1,6 +1,6 @@
 namespace Program.clase;
 
-public class electric
+public class electric : car
 {
     
 }
