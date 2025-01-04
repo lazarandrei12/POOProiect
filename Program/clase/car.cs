@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace Program.clase;
 
-public class car
+public abstract class car 
 {
     public string Brand { get; set; }
     public string Model { get; set; }
@@ -56,4 +56,8 @@ public class car
         return true;
     }
 
+    public void afiseazamasini()
+    {
+        Console.WriteLine($"marca: {Brand},model:{Model},anul fabricatiei: {YearOfFabrication},kilometraj: {Mileage},nr inmatriculare: {PlateNumber}");
+    }
 }
