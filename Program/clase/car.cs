@@ -2,33 +2,41 @@ using System.Text.RegularExpressions;
 
 namespace Program.clase;
 
-public abstract class car 
+public abstract class car
 {
-    public string Brand { get; set; }
-    public string Model { get; set; }
-    public int YearOfFabrication { get; set; }
-    public int Mileage { get; set; }
-    public string PlateNumber { get; set; }
-    public car (string brand, string model, int yearOfFabrication, int mileage, string plateNumber)
+    static private HashSet<string> numereInmatriculate = new HashSet<string>();
+    public string Marca { get; private set; }
+    public string Model { get; private set; }
+    public int AnDeFabricatie { get; private set; }
+    public int Kilometraj { get; private set; }
+    public string NumarInmatriculare { get; private set; }
+    public bool Valabilitate { get; private set; }
+    public int CostBaza { get; private set; }
+    public car (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
     {
-        this.Brand = brand;
+        this.Marca = marca;
         this.Model = model;
-        this.YearOfFabrication = yearOfFabrication;
-        this.Mileage = mileage;
-        this.PlateNumber = plateNumber;
+        this.AnDeFabricatie = anDeFabricatie;
+        this.Kilometraj = kilometraj;
+        this.NumarInmatriculare = numarInmatriculare;
+        this.Valabilitate = valabilitate;
+        this.CostBaza = costBaza;
         
-        if (IsValidPlateNumber(plateNumber))
+        if (!ValabilitateNumarInmatriculare(numarInmatriculare))
         {
-            Console.WriteLine("Valid plate number.");
+            throw new ArgumentException("Numar de inmatriculare invalid...");
         }
-        else
+
+        if (numereInmatriculate.Contains(numarInmatriculare))
         {
-            throw new Exception("Invalid plate number.");
+            throw new ArgumentException("Acest numar de inmatriculare este inregistrat deja...");
         }
+        
+        numereInmatriculate.Add(numarInmatriculare);
     }
-    static bool IsValidPlateNumber(string plateNumber)
+    private static bool ValabilitateNumarInmatriculare(string numarInmatriculare)
     {
-        HashSet<string> validPrefixes = new HashSet<string>
+        HashSet<string> PrefixJudet = new HashSet<string>
         {
             "B", "AB", "AG", "AR", "BC", "BH", "BN", "BR", "BT", "BV", "BZ",
             "CJ", "CL", "CS", "CT", "CV", "DB", "DJ", "GJ", "GL", "GR", "HD",
@@ -36,8 +44,8 @@ public abstract class car
             "SJ", "SM", "SV", "TL", "TM", "TR", "VL", "VN", "VS"
         };
 
-        string pattern = @"^([A-Z]{1,2})-(\d{2})-([A-Z]{3})$";
-        Match match = Regex.Match(plateNumber, pattern);
+        string exempluNrInmatriculare = @"^([A-Z]{1,2})-(\d{2})-([A-Z]{3})$";
+        Match match = Regex.Match(numarInmatriculare, exempluNrInmatriculare);
 
         if (!match.Success)
         {
@@ -45,19 +53,24 @@ public abstract class car
         }
 
         string prefix = match.Groups[1].Value;
-        string numbers = match.Groups[2].Value;
-        string suffix = match.Groups[3].Value;
-
-        if (!validPrefixes.Contains(prefix))
+        return PrefixJudet.Contains(prefix);
+    }
+    
+    public void InchiriazaMasina()
+    {
+        if (!Valabilitate)
         {
-            return false;
+            throw new ArgumentException("The car is currently being rented out.");
         }
 
-        return true;
+        Valabilitate = false;
     }
 
-    public void afiseazamasini()
+    public void ReturneazaMasina()
     {
-        Console.WriteLine($"marca: {Brand},model:{Model},anul fabricatiei: {YearOfFabrication},kilometraj: {Mileage},nr inmatriculare: {PlateNumber}");
+        Valabilitate = true;
     }
+
+    public abstract decimal CostInchirierePeZi();
+    
 }
