@@ -72,5 +72,10 @@ public abstract class car
     }
 
     public abstract decimal CostInchirierePeZi();
+
+    public void AfiseazaDateMasina()
+    {
+        Console.WriteLine($"marca: {Marca},model: {Model},andeaza: {AnDeFabricatie},kilometraj: {Kilometraj},nr: {NumarInmatriculare},vala: {Valabilitate},pret: {CostBaza}");
+    }
     
 }

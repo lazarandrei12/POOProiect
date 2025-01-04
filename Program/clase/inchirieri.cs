@@ -8,19 +8,18 @@ public class Inchirieri
     public car masina;
     public DateTime IncepuInchiriere;
     public DateTime FinalInchiriere;
-    public bool daune;
     public double pretTotal;
     public bool accident;
-
-    public Inchirieri(client client, car masina, DateTime incepuInchiriere, DateTime finalInchiriere)
+    public Inchirieri(client client, car masina, DateTime incepuInchiriere, DateTime finalInchiriere,bool accident)
     {
         this.client = client;
         this.masina = masina;
         this.IncepuInchiriere = incepuInchiriere;
         this.FinalInchiriere = finalInchiriere;
-        this.daune = false;
+        this.accident = accident;
+        
     }
-
+    
     public int duratainchirirere()
     {
         return (FinalInchiriere - IncepuInchiriere).Days;
@@ -31,5 +30,6 @@ public class Inchirieri
         return pretTotal * duratainchirirere();
     }
 
+   
 
 }
