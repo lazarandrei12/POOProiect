@@ -6,7 +6,7 @@ public class companie_inchirieri
     public string adresa;
     public int cod_unic;
     List<car> cars = new List<car>();
-    List<Inchirieri> inchiriaza = new List<Inchirieri>();
+    List<Inchirieri> flota = new List<Inchirieri>();
     
 
     public companie_inchirieri(string nume_companie, string adresa, int cod_unic)
@@ -15,7 +15,7 @@ public class companie_inchirieri
         this.adresa = adresa;
         this.cod_unic = cod_unic;
         List<car> cars = new List<car>();
-        List<Inchirieri> inchiriaza = new List<Inchirieri>();
+        List<Inchirieri> flota = new List<Inchirieri>();
     }
 
     public override string ToString()
