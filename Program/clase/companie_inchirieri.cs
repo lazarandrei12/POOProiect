@@ -5,8 +5,8 @@ public class companie_inchirieri
     public string nume_companie;
     public string adresa;
     public int cod_unic;
-    List<Car> flota = new List<Car>();
-    List<Inchirieri> inchiriate = new List<Inchirieri>();
+    public List<Car> flota = new List<Car>();
+    public List<Inchirieri> inchiriate = new List<Inchirieri>();
     
 
     public companie_inchirieri(string nume_companie, string adresa, int cod_unic)

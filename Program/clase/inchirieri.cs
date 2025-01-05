@@ -47,8 +47,9 @@ public class Inchirieri
 
     public void afiseazadetalii()
     {
-        
-        Console.WriteLine("durata inchirierii este de:"+ duratainchirirere());
-        Console.WriteLine("Pretul total este de:"+ masina.CostInchirierePeZi());
+        Console.WriteLine($"masina inchiriata:{masina.Marca}{masina.Model}");
+        Console.WriteLine($"durata inchirierii este de:{duratainchirirere()} zile");
+        Console.WriteLine($"Pretul total este de:{masina.CostInchirierePeZi()} lei");
+        Console.WriteLine($"stare: {masina.afiseazavalabilitate()}");
     }
 }

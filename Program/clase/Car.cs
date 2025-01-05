@@ -60,10 +60,11 @@ public abstract class Car
     {
         if (!Valabilitate)
         {
-            throw new ArgumentException("The car is currently being rented out.");
+            throw new ArgumentException($"Masina {Marca}{Model} este momentan inchiriata");
         }
 
         Valabilitate = false;
+        Console.WriteLine($"masina {Marca}{Model} a fost inchiriata");
     }
 
     public void ReturneazaMasina()
@@ -75,7 +76,11 @@ public abstract class Car
 
     public void AfiseazaDateMasina()
     {
-        Console.WriteLine($"marca: {Marca},model: {Model},andeaza: {AnDeFabricatie},kilometraj: {Kilometraj},nr: {NumarInmatriculare},vala: {Valabilitate},pret: {CostBaza}");
+        Console.WriteLine($"marca: {Marca},model: {Model},andefabricatie: {AnDeFabricatie},kilometraj: {Kilometraj},nr: {NumarInmatriculare},valabilitate: {Valabilitate},pret: {CostBaza}");
     }
-    
+
+    public string afiseazavalabilitate()
+    {
+        return Valabilitate ? "valabil" : "inchiriata";
+    }
 }
