@@ -26,39 +26,37 @@ class Program
         companie1.Adaugainchiriere(inchirirere2);
         inchirirere1.afiseazadetalii();
         inchirirere2.afiseazadetalii();
-    }
 
-    public static void Meniu(companie_inchirieri companie1)
+        while (true)
         {
-            while (true)
-            {
-                Console.WriteLine("Bun venit la PipepepuRent");
-                Console.WriteLine("1.Vezi masini pt inchiriere");
-                Console.WriteLine("2.Log in/Sign in");
-                Console.WriteLine("3.Pentru Adminisrator");
-                Console.WriteLine("4.Petru Client");
-                Console.WriteLine("5.Vizualizare istoric inchirieri ale companiei");
-                Console.WriteLine("6.Vizualizare istoric inchirieri client");
-                Console.WriteLine("7.Vizualizare castiguri");
-                Console.WriteLine("Alegeti o optiune: ");
-                string optiune = Console.ReadLine();
+            Console.WriteLine("Bun venit la PipepepuRent");
+            Console.WriteLine("1.Vezi masini pt inchiriere");
+            Console.WriteLine("2.Log in/Sign in");
+            Console.WriteLine("3.Pentru Adminisrator");
+            Console.WriteLine("4.Petru Client");
+            Console.WriteLine("5.Vizualizare istoric inchirieri ale companiei");
+            Console.WriteLine("6.Vizualizare istoric inchirieri client");
+            Console.WriteLine("7.Vizualizare castiguri");
+            Console.WriteLine("Alegeti o optiune: ");
+            string optiune = Console.ReadLine();
 
-                switch (optiune)
-                {
-                    case "1":
-                        Console.WriteLine("Masini pt inchiriere:");
-                        foreach (var masina in companie1.flota)
+            switch (optiune)
+            {
+                case "1":
+                    Console.WriteLine("Masini pt inchiriere:");
+                    foreach (var masina in companie1.flota)
+                    {
+                        if (masina.Valabilitate == true)
                         {
-                            if (masina.Valabilitate == true)
-                            {
-                                masina.AfiseazaDateMasina();
-                            }
+                            masina.AfiseazaDateMasina();
                         }
-                        break;
-                    default: Console.WriteLine("optiune incorecta");
-                        break;
-                }
+                    }
+
+                    break;
+                default:
+                    Console.WriteLine("optiune incorecta");
+                    break;
             }
         }
-    
+    } 
 }
