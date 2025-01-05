@@ -2,9 +2,9 @@ using System.Text.RegularExpressions;
 
 namespace Program.clase;
 
-public abstract class car
+public abstract class Car
 {
-    static private HashSet<string> numereInmatriculate = new HashSet<string>();
+    private List<string> numereInmatriculate = new List<string>();
     public string Marca { get; private set; }
     public string Model { get; private set; }
     public int AnDeFabricatie { get; private set; }
@@ -12,8 +12,9 @@ public abstract class car
     public string NumarInmatriculare { get; private set; }
     public bool Valabilitate { get; private set; }
     public int CostBaza { get; private set; }
-    public car (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
+    public Car (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
     {
+        
         this.Marca = marca;
         this.Model = model;
         this.AnDeFabricatie = anDeFabricatie;
@@ -21,15 +22,14 @@ public abstract class car
         this.NumarInmatriculare = numarInmatriculare;
         this.Valabilitate = valabilitate;
         this.CostBaza = costBaza;
+        if (numereInmatriculate.Contains(numarInmatriculare))
+        {
+            throw new ArgumentException("Acest numar de inmatriculare este inregistrat deja...");
+        }
         
         if (!ValabilitateNumarInmatriculare(numarInmatriculare))
         {
             throw new ArgumentException("Numar de inmatriculare invalid...");
-        }
-
-        if (numereInmatriculate.Contains(numarInmatriculare))
-        {
-            throw new ArgumentException("Acest numar de inmatriculare este inregistrat deja...");
         }
         
         numereInmatriculate.Add(numarInmatriculare);
@@ -71,7 +71,7 @@ public abstract class car
         Valabilitate = true;
     }
 
-    public abstract decimal CostInchirierePeZi();
+    public abstract double CostInchirierePeZi();
 
     public void AfiseazaDateMasina()
     {

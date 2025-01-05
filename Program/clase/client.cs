@@ -18,7 +18,7 @@ public class client
         {
             if (cnp.Length != 13)
             {
-                throw new ArgumentException("scris gresit");
+                throw new ArgumentException("CNP-ul este scris gresit");
             }
         }
         catch (ArgumentException e)
