@@ -1,6 +1,6 @@
 namespace Program.clase;
 
-public class user
+public class User
 {
     public 
 }

@@ -5,13 +5,13 @@ namespace Program.clase;
 
 public class Inchirieri
 {
-    public client client;
-    public Car masina;
+    public Client client;
+    public Masina masina;
     public DateOnly InceputInchiriere;
     public DateOnly FinalInchiriere;
     public double pretTotal;
     public bool accident;
-    public Inchirieri(client client, Car masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool accident)
+    public Inchirieri(Client client, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool accident)
     {
         this.client = client;
         this.masina = masina;
@@ -19,17 +19,17 @@ public class Inchirieri
         this.FinalInchiriere = finalInchiriere;
         this.accident = accident;
 
-        afiseazapret();
+        AfiseazaPret();
     }
     
-    public int duratainchirirere()
+    public int DurataInchirirere()
     {
         return FinalInchiriere.DayNumber - InceputInchiriere.DayNumber;
     }
     
-    public double afiseazapret()
+    public double AfiseazaPret()
     {
-        return pretTotal * duratainchirirere();
+        return pretTotal * DurataInchirirere();
     }
 
     public override string ToString()
@@ -37,20 +37,20 @@ public class Inchirieri
         return $"Client: {client},masina:{masina},inceputInchiriere:{InceputInchiriere},data de final:{FinalInchiriere},accident:{accident}";
     }
 
-    public void ValdareDate(DateOnly InceputInchirire, DateOnly FinalInchirire)
+    public void ValidareDate(DateOnly InceputInchiriere, DateOnly FinalInchiriere)
     {
-        if (FinalInchiriere < InceputInchirire)
+        if (FinalInchiriere < InceputInchiriere)
         {
             throw new ArgumentException("data de final trb dupa cea de inceput");
         }
     }
 
-    public void afiseazadetalii()
+    public void AfiseazaDetalii()
     {
         Console.WriteLine($"Masina închiriată:{masina.Marca} {masina.Model} {masina.NumarInmatriculare}");
-        Console.WriteLine($"Durata închirierii este de: {duratainchirirere()} de zile");
-        Console.WriteLine($"Pretul total este de: {masina.CostInchirierePeZi()*duratainchirirere()} lei");
-        if (!masina.afiseazavalabilitate())
+        Console.WriteLine($"Durata închirierii este de: {DurataInchirirere()} de zile");
+        Console.WriteLine($"Pretul total este de: {masina.CostInchirierePeZi()*DurataInchirirere()} lei");
+        if (!masina.AfiseazaValabilitate())
         {
             Console.WriteLine($"Masina {masina.Marca} {masina.Model} {masina.NumarInmatriculare} este deja închiriată");
         }

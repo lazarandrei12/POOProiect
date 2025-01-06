@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace Program.clase;
 
-public abstract class Car
+public abstract class Masina
 {
     private List<string> numereInmatriculate = new List<string>();
     public string Marca { get; private set; }
@@ -12,7 +12,7 @@ public abstract class Car
     public string NumarInmatriculare { get; private set; }
     public bool Valabilitate { get; private set; }
     public int CostBaza { get; private set; }
-    public Car (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
+    public Masina (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
     {
         
         this.Marca = marca;
@@ -84,10 +84,19 @@ public abstract class Car
 
     public void AfiseazaDateMasina()
     {
-        Console.WriteLine($"marca: {Marca},model: {Model},andefabricatie: {AnDeFabricatie},kilometraj: {Kilometraj},nr: {NumarInmatriculare},valabilitate: {Valabilitate},pret: {CostBaza}");
+        Console.WriteLine($"Marca: {Marca}, Model: {Model}, An de fabricatie: {AnDeFabricatie}, Kilometraj: {Kilometraj}, Numar Inmatriculare: {NumarInmatriculare}, Pret: {CostInchirierePeZi()}");
+        if (!AfiseazaValabilitate())
+        {
+            Console.WriteLine($"Masina {Marca} {Model} {NumarInmatriculare} este deja închiriată");
+        }
+        else
+        {
+            Console.WriteLine($"Masina {Marca} {Model} {NumarInmatriculare} este valabilă pentru închiriere");
+        }
+        Console.WriteLine();
     }
 
-    public bool afiseazavalabilitate()
+    public bool AfiseazaValabilitate()
     {
         return Valabilitate;
     }

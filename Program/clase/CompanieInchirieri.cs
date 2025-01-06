@@ -1,29 +1,29 @@
 namespace Program.clase;
 
-public class companie_inchirieri
+public class CompanieInchirieri
 {
-    public string nume_companie;
-    public string adresa;
-    public int cod_unic;
-    public List<Car> flota = new List<Car>();
+    public string NumeCompanie;
+    public string Adresa;
+    public int CodUnic;
+    public List<Masina> flota = new List<Masina>();
     public List<Inchirieri> inchiriate = new List<Inchirieri>();
     
 
-    public companie_inchirieri(string nume_companie, string adresa, int cod_unic)
+    public CompanieInchirieri(string nume_companie, string adresa, int cod_unic)
     {
-        this.nume_companie = nume_companie;
-        this.adresa = adresa;
-        this.cod_unic = cod_unic;
-        List<Car> flota = new List<Car>();
+        this.NumeCompanie = nume_companie;
+        this.Adresa = adresa;
+        this.CodUnic = cod_unic;
+        List<Masina> flota = new List<Masina>();
         List<Inchirieri> inchiriate = new List<Inchirieri>();
     }
 
-    public void Adaugamasina(Car masina)
+    public void AdaugaMasina(Masina masina)
     {
         flota.Add(masina);
     }
 
-    public void Adaugainchiriere(Inchirieri inchiriere)
+    public void AdaugaInchiriere(Inchirieri inchiriere)
     {
         inchiriate.Add(inchiriere);
         Console.WriteLine($"Client: {inchiriere.client.nume}, Masina: {inchiriere.masina.Marca} {inchiriere.masina.Model} {inchiriere.masina.NumarInmatriculare}, Durata: {inchiriere.InceputInchiriere}-{inchiriere.FinalInchiriere}");
@@ -31,7 +31,7 @@ public class companie_inchirieri
     }
     public override string ToString()
     {
-        return $"{nume_companie}, {adresa}, {cod_unic}";
+        return $"{NumeCompanie}, {Adresa}, {CodUnic}";
     }
    
 }

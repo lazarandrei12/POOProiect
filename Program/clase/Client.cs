@@ -1,13 +1,13 @@
 namespace Program.clase;
 
-public class client
+public class Client
 {
     public string nume;
     public string cnp;
     public string username;
     public string password;
     List<Inchirieri> istoricInchirieri = new List<Inchirieri>();
-    public client(string nume, string cnp, string username, string password)
+    public Client(string nume, string cnp, string username, string password)
     {
         this.nume = nume;
         this.cnp = cnp;
@@ -26,7 +26,7 @@ public class client
             Console.WriteLine(e.Message);
         }
     }
-    public bool istoricaccident()
+    public bool IstoricAccident()
     {
         foreach (Inchirieri inchiriat in istoricInchirieri)
         {
@@ -38,7 +38,7 @@ public class client
         return true;
     }
     
-    public void afiseazaclient()
+    public void AfiseazaClient()
     {
         Console.WriteLine($"nume: {nume}, cnp: {cnp}, username: {username}, password: {password}");
     }
