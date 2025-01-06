@@ -7,11 +7,11 @@ public class Inchirieri
 {
     public client client;
     public Car masina;
-    public DateTime InceputInchiriere;
-    public DateTime FinalInchiriere;
+    public DateOnly InceputInchiriere;
+    public DateOnly FinalInchiriere;
     public double pretTotal;
     public bool accident;
-    public Inchirieri(client client, Car masina, DateTime inceputInchiriere, DateTime finalInchiriere,bool accident)
+    public Inchirieri(client client, Car masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool accident)
     {
         this.client = client;
         this.masina = masina;
@@ -24,7 +24,7 @@ public class Inchirieri
     
     public int duratainchirirere()
     {
-        return (FinalInchiriere - InceputInchiriere).Days;
+        return FinalInchiriere.DayNumber - InceputInchiriere.DayNumber;
     }
     
     public double afiseazapret()
@@ -37,7 +37,7 @@ public class Inchirieri
         return $"Client: {client},masina:{masina},inceputInchiriere:{InceputInchiriere},data de final:{FinalInchiriere},accident:{accident}";
     }
 
-    public void ValdareDate(DateTime InceputInchirire, DateTime FinalInchirire)
+    public void ValdareDate(DateOnly InceputInchirire, DateOnly FinalInchirire)
     {
         if (FinalInchiriere < InceputInchirire)
         {
@@ -47,9 +47,17 @@ public class Inchirieri
 
     public void afiseazadetalii()
     {
-        Console.WriteLine($"masina inchiriata:{masina.Marca}{masina.Model}");
-        Console.WriteLine($"durata inchirierii este de:{duratainchirirere()} zile");
-        Console.WriteLine($"Pretul total este de:{masina.CostInchirierePeZi()} lei");
-        Console.WriteLine($"stare: {masina.afiseazavalabilitate()}");
+        Console.WriteLine($"Masina închiriată:{masina.Marca} {masina.Model} {masina.NumarInmatriculare}");
+        Console.WriteLine($"Durata închirierii este de: {duratainchirirere()} de zile");
+        Console.WriteLine($"Pretul total este de: {masina.CostInchirierePeZi()*duratainchirirere()} lei");
+        if (!masina.afiseazavalabilitate())
+        {
+            Console.WriteLine($"Masina {masina.Marca} {masina.Model} {masina.NumarInmatriculare} este deja închiriată");
+        }
+        else
+        {
+            Console.WriteLine($"Masina {masina.Marca} {masina.Model} {masina.NumarInmatriculare} este valabilă pentru închiriere");
+        }
+        Console.WriteLine();
     }
 }

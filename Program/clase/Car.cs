@@ -87,8 +87,8 @@ public abstract class Car
         Console.WriteLine($"marca: {Marca},model: {Model},andefabricatie: {AnDeFabricatie},kilometraj: {Kilometraj},nr: {NumarInmatriculare},valabilitate: {Valabilitate},pret: {CostBaza}");
     }
 
-    public string afiseazavalabilitate()
+    public bool afiseazavalabilitate()
     {
-        return Valabilitate ? "valabil" : "inchiriata";
+        return Valabilitate;
     }
 }

@@ -21,13 +21,13 @@ public class companie_inchirieri
     public void Adaugamasina(Car masina)
     {
         flota.Add(masina);
-        Console.WriteLine($"masina:{masina.Marca}{masina.Model}{masina.NumarInmatriculare}");
     }
 
     public void Adaugainchiriere(Inchirieri inchiriere)
     {
         inchiriate.Add(inchiriere);
-        Console.WriteLine($"client:{inchiriere.client},masina:{inchiriere.masina},durata:{inchiriere.InceputInchiriere}-{inchiriere.FinalInchiriere}");
+        Console.WriteLine($"Client: {inchiriere.client.nume}, Masina: {inchiriere.masina.Marca} {inchiriere.masina.Model} {inchiriere.masina.NumarInmatriculare}, Durata: {inchiriere.InceputInchiriere}-{inchiriere.FinalInchiriere}");
+        Console.WriteLine();
     }
     public override string ToString()
     {
