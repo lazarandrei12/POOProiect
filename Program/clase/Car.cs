@@ -55,16 +55,24 @@ public abstract class Car
         string prefix = match.Groups[1].Value;
         return PrefixJudet.Contains(prefix);
     }
-    
+
     public void InchiriazaMasina()
     {
-        if (!Valabilitate)
+        try
         {
-            throw new ArgumentException($"Masina {Marca}{Model} este momentan inchiriata");
-        }
+            if (!Valabilitate)
+            {
+                throw new ArgumentException($"Masina {Marca}{Model} este momentan inchiriata");
+            }
 
-        Valabilitate = false;
-        Console.WriteLine($"masina {Marca}{Model} a fost inchiriata");
+            Valabilitate = false;
+            Console.WriteLine($"masina {Marca}{Model} a fost inchiriata");
+        }
+        catch (ArgumentException e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
     }
 
     public void ReturneazaMasina()
