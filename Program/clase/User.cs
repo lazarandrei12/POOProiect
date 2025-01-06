@@ -82,15 +82,18 @@ public class User
             {
                 if (cnp.Length != 13)
                 {
-                    throw new ArgumentException("CNP-ul dumneavoastra invalid");
+                    Console.WriteLine("CNP-ul dumneavoastra invalid");
                 }
-
-                validCNP = true;
+                else
+                {
+                    validCNP = true;
+                    Console.WriteLine("Cont creat");
+                }
+                
 
                 User newUser = new User
                     { UsernameClient = username, PasswordClient = parola, nume = nume, cnp = cnp, admin = false };
                 users.Add(newUser);
-                Console.WriteLine("Cont creat");
             }
             catch (ArgumentException e)
             {

@@ -19,10 +19,6 @@ class Program
         companie1.AdaugaMasina(car2);
         companie1.AdaugaMasina(car3);
         companie1.AdaugaMasina(car4);
-        DateOnly datainceput1 = DateOnly.Parse("2024-10-5");
-        DateOnly datafinal1 = DateOnly.Parse("2024-10-15");
-        DateOnly datainceput2 = DateOnly.Parse("2024-10-18");
-        DateOnly datafinal2 = DateOnly.Parse("2025-1-25");
         Inchirieri inchirirere1 = new Inchirieri(client1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"), true);
         Inchirieri inchirirere2 = new Inchirieri(client2, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), false);
         companie1.AdaugaInchiriere(inchirirere1);
