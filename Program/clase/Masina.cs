@@ -91,7 +91,7 @@ public abstract class Masina
         }
         else
         {
-            Console.WriteLine($"Masina {Marca} {Model} {NumarInmatriculare} este valabilă pentru închiriere");
+            Console.WriteLine("Este valabilă pentru închiriere");
         }
         Console.WriteLine();
     }

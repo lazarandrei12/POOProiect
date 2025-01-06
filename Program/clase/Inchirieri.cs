@@ -34,7 +34,7 @@ public class Inchirieri
 
     public override string ToString()
     {
-        return $"Client: {client},masina:{masina},inceputInchiriere:{InceputInchiriere},data de final:{FinalInchiriere},accident:{accident}";
+        return $"Client: {client.nume}, Masina: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}, Perioada inchirierii: {InceputInchiriere}-{FinalInchiriere}, Accident: {accident}";
     }
 
     public void ValidareDate(DateOnly InceputInchiriere, DateOnly FinalInchiriere)
