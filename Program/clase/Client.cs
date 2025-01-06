@@ -26,7 +26,7 @@ public class Client
             Console.WriteLine(e.Message);
         }
     }
-    public bool IstoricAccident()
+    public bool istoricaccident()
     {
         foreach (Inchirieri inchiriat in istoricInchirieri)
         {
@@ -38,7 +38,7 @@ public class Client
         return true;
     }
     
-    public void AfiseazaClient()
+    public void afiseazaclient()
     {
         Console.WriteLine($"nume: {nume}, cnp: {cnp}, username: {username}, password: {password}");
     }
