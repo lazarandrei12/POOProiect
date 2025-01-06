@@ -4,15 +4,12 @@ public class Client
 {
     public string nume;
     public string cnp;
-    public string username;
-    public string password;
     List<Inchirieri> istoricInchirieri = new List<Inchirieri>();
-    public Client(string nume, string cnp, string username, string password)
+    public Client(string nume, string cnp)
     {
         this.nume = nume;
         this.cnp = cnp;
-        this.username = username;
-        this.password = password;
+       
     
         try
         {
@@ -40,6 +37,6 @@ public class Client
     
     public void afiseazaclient()
     {
-        Console.WriteLine($"nume: {nume}, cnp: {cnp}, username: {username}, password: {password}");
+        Console.WriteLine($"nume: {nume}, cnp: {cnp}");
     }
 }

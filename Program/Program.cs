@@ -8,9 +8,9 @@ class Program
     static void Main(string[] args)
     {
         CompanieInchirieri companie1 = new CompanieInchirieri("pipepepuRent", "timisoara", 12345);
-        Client client1 = new Client("Belg David", "1234567891023", "davidblg123", "beleag");
-        Client client2 = new Client("Basholin Darius", "2256784517896", "stiuke", "liverpool>arsenal");
-        Client client3 = new Client("Laser Andrew", "5423224517896", "firmirelu", "rece");
+        Client client1 = new Client("Belg David", "1234567891023");
+        Client client2 = new Client("Basholin Darius", "2256784517896");
+        Client client3 = new Client("Laser Andrew", "5423224517896");
         Masina car1 = new MasinaElectric("Tesla", "Y", 2019, 10000, "CJ-15-MUE", true, 100);
         Masina car2 = new MasinaElectric("Dacia", "Sandero", 2021, 2414, "CJ-15-MIL", false, 80);
         Masina car3 = new MasinaStandard("Audi", "A5", 2015, 150000, "AG-23-SUJ", true, 150);
@@ -29,7 +29,8 @@ class Program
         companie1.AdaugaInchiriere(inchirirere2);
         inchirirere1.AfiseazaDetalii();
         inchirirere2.AfiseazaDetalii();
-
+        User user = new User();
+        
         while (true)
         {
             Console.WriteLine("Bun venit la PipepepuRent");
@@ -58,9 +59,20 @@ class Program
                 case "2":
                     Console.WriteLine("1.Log in");
                     Console.WriteLine("2.Sign up");
-                    Console.WriteLine("3.Log in administrator");
                     Console.WriteLine("Alegeti o optiune: ");
                     string suboptiune = Console.ReadLine();
+                    if (suboptiune == "1")
+                    {
+                        user.Login();
+                    }
+                    else if (suboptiune == "2")
+                    {
+                        user.SignUp();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Optiune invalida");
+                    }
                     break;
                 case "3":
                     break;
