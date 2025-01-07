@@ -1,6 +1,7 @@
 namespace Program.clase;
 using System.Collections.Generic;
-public class Admin
+public class Admin : User
 {
+    
     
 }

@@ -10,7 +10,7 @@ public abstract class Masina
     public int AnDeFabricatie { get; private set; }
     public int Kilometraj { get; private set; }
     public string NumarInmatriculare { get; private set; }
-    public bool Valabilitate { get; private set; }
+    public bool Valabilitate { get; set; }
     public int CostBaza { get; private set; }
     public Masina (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
     {
@@ -85,6 +85,7 @@ public abstract class Masina
     public void AfiseazaDateMasina()
     {
         Console.WriteLine($"Marca: {Marca}, Model: {Model}, An de fabricatie: {AnDeFabricatie}, Kilometraj: {Kilometraj}, Numar Inmatriculare: {NumarInmatriculare}, Pret: {CostInchirierePeZi()}");
+        
         if (!AfiseazaValabilitate())
         {
             Console.WriteLine($"Masina {Marca} {Model} {NumarInmatriculare} este deja închiriată");

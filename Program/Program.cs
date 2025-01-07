@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using Program.clase;
 
 namespace Program;
@@ -77,6 +78,11 @@ class Program
                     }
                     break;
                 case "3":
+                    if (!user.IsAdmin)
+                    {
+                        Console.WriteLine("optiune valabila doar pentru admini;");
+                        break;
+                    }
                     List<MasinaStandard> masiniS = new List<MasinaStandard>();
                     List<MasinaElectric> masiniE = new List<MasinaElectric>();
                     bool exit1 = false;
@@ -134,6 +140,65 @@ class Program
                     Console.WriteLine("1.Vizualizare masini disponibile pentru inchiriat");
                     Console.WriteLine("2.Inchiriere masina selectata");
                     Console.WriteLine("3.Inapoiere mașină");
+                    Console.WriteLine("Alegeti o optiune: ");
+                    string optiune3 = Console.ReadLine();
+                    switch (optiune3)
+                    {
+                        case "1":
+                            Console.WriteLine("Masinile disponibile sunt: ");
+                            foreach (var masina in companie1.flota)
+                            {
+                                masina.AfiseazaDateMasina();
+                            }
+                            break;
+                        case "2":
+                            Console.WriteLine("Selectati numarul masinii pe care vreti sa o inchiriati ");
+                            int numarulMasinii;
+                            if (int.TryParse(Console.ReadLine(), out numarulMasinii))
+                            {
+                                var MasiniDisponibile = companie1.flota.Where(x => x.Valabilitate == true).ToList();
+                                if (numarulMasinii > 0 && numarulMasinii < MasiniDisponibile.Count)
+                                {
+                                    var DeInchiriat = MasiniDisponibile[numarulMasinii - 1];
+                                    DeInchiriat.Valabilitate = false;
+                                    Console.WriteLine("Vehicul inchiriat");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Numar invalid ");
+                                }
+                            }
+                            else
+                                {
+                                    Console.WriteLine("Dati un numar valid");
+                                }
+                            break;
+                        case "3":
+                            Console.WriteLine("Doriti sa returnati masina inchiriata?");
+                            string Confirmare  = Console.ReadLine();
+                            if (Confirmare.ToLower() == "da")
+                            {
+                                var MasinaInchriata = companie1.flota.FirstOrDefault(x => !x.Valabilitate);
+                                if (MasinaInchriata != null)
+                                {
+                                    MasinaInchriata.Valabilitate = true;
+                                    Console.WriteLine("Masina a fost returnata cu succes!");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Nu ati inchirirat nicio masina.");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Inapoiere invalida!");
+                            }
+                            break;
+                        default:
+                            Console.WriteLine("Optiune invalida");
+                            break;
+                            
+                    }
                     break;
                 case "5":
                     Console.WriteLine();

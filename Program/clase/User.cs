@@ -6,13 +6,14 @@ namespace Program.clase;
 
 public class User
 {
-    public string UsernameAdmin;
-    public string ParolaAdmin;
+    public string UsernameAdmin= "admin";
+    public string ParolaAdmin = "admin225200";
     public string UsernameClient;
     public string ParolaClient;
     public string Nume;
     public string Cnp;
     public bool IsAdmin;
+    public bool Logat;
     public static List<User> users = new List<User>();
 
     public User()
@@ -37,8 +38,9 @@ public class User
         {
             if (user.UsernameClient == username && user.ParolaClient == parola)
             {
-                Console.WriteLine("Ai intrat in cont! ");
+                Console.WriteLine($"Ai intrat in cont! {user.UsernameClient} ");
                 IsAdmin = false;
+                Logat = true;
                 return;
             }
         }
@@ -60,7 +62,7 @@ public class User
     public void SignUp()
     {
         Console.WriteLine("Creeare cont");
-        Console.WriteLine("Introduceti username: ");
+        Console.WriteLine("Introduceti username nou: ");
         string username = Console.ReadLine();
         Console.WriteLine("Introduceti parola: ");
         string parola = Console.ReadLine();
@@ -90,7 +92,8 @@ public class User
             else
             {
                 validCNP = true;
-                Console.WriteLine("Cont creat");
+                Console.WriteLine($"Cont creat\n Bun venit la PipepepuRent ");
+                Logat = true;
             }
                 
 
