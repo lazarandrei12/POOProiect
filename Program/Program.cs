@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Collections.Generic;
 using Program.clase;
 
 namespace Program;
@@ -20,14 +21,16 @@ class Program
         companie1.AdaugaMasina(car3);
         companie1.AdaugaMasina(car4);
         Inchirieri inchirirere1 = new Inchirieri(client1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"), true);
-        Inchirieri inchirirere2 = new Inchirieri(client2, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), false);
+        Inchirieri inchirirere2 = new Inchirieri(client2, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), true);
         companie1.AdaugaInchiriere(inchirirere1);
+        client1.AdaugaIstoricInchirieri(inchirirere1);
         companie1.AdaugaInchiriere(inchirirere2);
         inchirirere1.AfiseazaDetalii();
         inchirirere2.AfiseazaDetalii();
         User user = new User();
-        
-        while (true)
+
+        bool exit = false;
+        while (!exit)
         {
             Console.WriteLine("Bun venit la PipepepuRent");
             Console.WriteLine("1.Vezi masini pt inchiriere");
@@ -37,12 +40,14 @@ class Program
             Console.WriteLine("5.Vizualizare istoric inchirieri ale companiei");
             Console.WriteLine("6.Vizualizare istoric inchirieri client");
             Console.WriteLine("7.Vizualizare castiguri");
+            Console.WriteLine("8.Iesire");
             Console.WriteLine("Alegeti o optiune: ");
             string optiune = Console.ReadLine();
 
             switch (optiune)
             {
                 case "1":
+                    Console.WriteLine();
                     Console.WriteLine("Masini pt inchiriere:");
                     foreach (var masina in companie1.flota)
                     {
@@ -53,15 +58,16 @@ class Program
                     }
                     break;
                 case "2":
+                    Console.WriteLine();
                     Console.WriteLine("1.Log in");
                     Console.WriteLine("2.Sign up");
                     Console.WriteLine("Alegeti o optiune: ");
-                    string suboptiune = Console.ReadLine();
-                    if (suboptiune == "1")
+                    string suboptiune1 = Console.ReadLine();
+                    if (suboptiune1 == "1")
                     {
                         user.Login();
                     }
-                    else if (suboptiune == "2")
+                    else if (suboptiune1 == "2")
                     {
                         user.SignUp();
                     }
@@ -71,8 +77,63 @@ class Program
                     }
                     break;
                 case "3":
+                    List<MasinaStandard> masiniS = new List<MasinaStandard>();
+                    List<MasinaElectric> masiniE = new List<MasinaElectric>();
+                    bool exit1 = false;
+                    while (!exit1)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("1.Adaugare masina");
+                        Console.WriteLine("2.Stergere masina");
+                        Console.WriteLine("3.Iesire");
+                        Console.WriteLine("Alegeti o optiune: ");
+                        string suboptiune2 = Console.ReadLine();
+                        switch (suboptiune2)
+                        {
+                            case "1":
+                                Console.WriteLine("Doresti sa adaugi o masina standard sau electric?");
+                                string TipMasina = Console.ReadLine();
+                                if (TipMasina.ToLower() == "standard")
+                                {
+                                    MasinaStandard.CitireMasinaDeLaTastatura();
+                                }
+                                else if (TipMasina.ToLower() == "electric")
+                                {
+                                    MasinaElectric.CitireMasinaDeLaTastatura();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Tipul de masina nu este valid");
+                                }
+
+                                break;
+                            case "2":
+                                Console.WriteLine("Doresti sa adaugi o masina standard sau electric?");
+                                TipMasina = Console.ReadLine();
+                                if (TipMasina.ToLower() == "standard")
+                                {
+                                    MasinaStandard.StergeMasina(masiniS);
+                                }
+                                else if (TipMasina.ToLower() == "electric")
+                                {
+                                    MasinaElectric.StergeMasina(masiniE);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Tipul de masina nu este valid");
+                                }
+                                break;
+                            case "3":
+                                exit1 = true;
+                                break;
+                        }
+                    }
                     break;
                 case "4":
+                    Console.WriteLine();
+                    Console.WriteLine("1.Vizualizare masini disponibile pentru inchiriat");
+                    Console.WriteLine("2.Inchiriere masina selectata");
+                    Console.WriteLine("3.Inapoiere mașină");
                     break;
                 case "5":
                     Console.WriteLine();
@@ -85,8 +146,19 @@ class Program
                     }
                     break;
                 case "6":
+                    Console.WriteLine();
+                    Console.WriteLine($"ISTORIC INCHIRIERI CLIENT {client1.Nume} :");
+                    i = 1;
+                    foreach (var inchiriere in client1.IstoricInchirieri)
+                    {
+                        Console.WriteLine($"{i}. {client1.IstoricInchirieri[i - 1]}");
+                        i++;
+                    }
                     break;
                 case "7":
+                    break;
+                case "8":
+                    exit = true;
                     break;
                 default:
                     Console.WriteLine("optiune incorecta");

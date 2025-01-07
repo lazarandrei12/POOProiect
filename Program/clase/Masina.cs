@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-
+using System.Collections.Generic;
 namespace Program.clase;
 
 public abstract class Masina
@@ -100,4 +100,5 @@ public abstract class Masina
     {
         return Valabilitate;
     }
+    
 }

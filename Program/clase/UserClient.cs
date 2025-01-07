@@ -1,6 +1,6 @@
 namespace Program.clase;
 using System.Collections.Generic;
-public class Admin
+public abstract class UserClient : User
 {
     
 }

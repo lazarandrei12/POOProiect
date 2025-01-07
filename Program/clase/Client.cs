@@ -1,15 +1,15 @@
 namespace Program.clase;
-
+using System.Collections.Generic;
 public class Client
 {
-    public string nume;
-    public string cnp;
-    List<Inchirieri> istoricInchirieri = new List<Inchirieri>();
+    public string Nume;
+    public string Cnp;
+    public List<Inchirieri> IstoricInchirieri = new List<Inchirieri>();
     public Client(string nume, string cnp)
     {
-        this.nume = nume;
-        this.cnp = cnp;
-       
+        this.Nume = nume;
+        this.Cnp = cnp;
+        List<Inchirieri> IstoricInchirieri = new List<Inchirieri>();
     
         try
         {
@@ -23,20 +23,17 @@ public class Client
             Console.WriteLine(e.Message);
         }
     }
-    public bool istoricaccident()
+    public bool PoateInchiria()
     {
-        foreach (Inchirieri inchiriat in istoricInchirieri)
-        {
-            if (inchiriat.accident)
-            {
-                return false;
-            }
-        }
-        return true;
+        return !IstoricInchirieri.Any(i => i.Daune);
     }
     
+    public void AdaugaIstoricInchirieri(Inchirieri inchirieri)
+    {
+        IstoricInchirieri.Add(inchirieri);
+    }    
     public void afiseazaclient()
     {
-        Console.WriteLine($"nume: {nume}, cnp: {cnp}");
+        Console.WriteLine($"nume: {Nume}, cnp: {Cnp}");
     }
 }

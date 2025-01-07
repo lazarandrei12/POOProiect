@@ -1,6 +1,6 @@
 using System.Runtime.ConstrainedExecution;
 using System.Threading.Channels;
-
+using System.Collections.Generic;
 namespace Program.clase;
 
 public class Inchirieri
@@ -10,14 +10,14 @@ public class Inchirieri
     public DateOnly InceputInchiriere;
     public DateOnly FinalInchiriere;
     public double pretTotal;
-    public bool accident;
-    public Inchirieri(Client client, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool accident)
+    public bool Daune;
+    public Inchirieri(Client client, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool daune)
     {
         this.client = client;
         this.masina = masina;
         this.InceputInchiriere = inceputInchiriere;
         this.FinalInchiriere = finalInchiriere;
-        this.accident = accident;
+        this.Daune = daune;
 
         AfiseazaPret();
     }
@@ -34,7 +34,7 @@ public class Inchirieri
 
     public override string ToString()
     {
-        return $"Client: {client.nume}, Masina: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}, Perioada inchirierii: {InceputInchiriere}-{FinalInchiriere}, Accident: {accident}";
+        return $"Client: {client.Nume}, Masina: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}, Perioada inchirierii: {InceputInchiriere}-{FinalInchiriere}, Daune: {Daune}";
     }
 
     public void ValidareDate(DateOnly InceputInchiriere, DateOnly FinalInchiriere)

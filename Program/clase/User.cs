@@ -1,17 +1,18 @@
 using System.Diagnostics;
+using System.Collections.Generic;
 using Console = System.Console;
 
 namespace Program.clase;
 
 public class User
 {
-    public string UsenameAdmin = "admin";
-    public string ParolaAdmin = "admin225200";
-    private string UsernameClient = "doru";
-    private string PasswordClient = "doru225200";
-    public string nume;
-    public string cnp;
-    public bool admin;
+    public string UsernameAdmin;
+    public string ParolaAdmin;
+    public string UsernameClient;
+    public string ParolaClient;
+    public string Nume;
+    public string Cnp;
+    public bool IsAdmin;
     public static List<User> users = new List<User>();
 
     public User()
@@ -26,18 +27,18 @@ public class User
         Console.WriteLine("Introduceti parola: ");
         string parola = Console.ReadLine();
         
-        if (username == UsenameAdmin && parola == ParolaAdmin)
+        if (username == UsernameAdmin && parola == ParolaAdmin)
         {
             Console.WriteLine("Ai intrat in cont de administrator");
-            admin = true;
+            IsAdmin = true;
             return;
         }
         foreach (var user in users)
         {
-            if (user.UsernameClient == username && user.PasswordClient == parola)
+            if (user.UsernameClient == username && user.ParolaClient == parola)
             {
                 Console.WriteLine("Ai intrat in cont! ");
-                admin = false;
+                IsAdmin = false;
                 return;
             }
         }
@@ -48,6 +49,11 @@ public class User
         if (raspuns.ToLower() == "da")
         {
             SignUp();
+        }
+
+        if (raspuns.ToLower() == "nu")
+        {
+            return;
         }
     }
 
@@ -77,29 +83,22 @@ public class User
         {
             Console.WriteLine("CNP-ul dumneavoastra: ");
             cnp = Console.ReadLine();
-
-            try
+            if (cnp.Length != 13)
+            { 
+                Console.WriteLine("CNP-ul dumneavoastra invalid");
+            }
+            else
             {
-                if (cnp.Length != 13)
-                {
-                    Console.WriteLine("CNP-ul dumneavoastra invalid");
-                }
-                else
-                {
-                    validCNP = true;
-                    Console.WriteLine("Cont creat");
-                }
+                validCNP = true;
+                Console.WriteLine("Cont creat");
+            }
                 
 
-                User newUser = new User
-                    { UsernameClient = username, PasswordClient = parola, nume = nume, cnp = cnp, admin = false };
-                users.Add(newUser);
-            }
-            catch (ArgumentException e)
+            User newUser = new User
             {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+                UsernameClient = username, ParolaClient = parola, Nume = nume, Cnp = cnp, IsAdmin = false
+            };
+            users.Add(newUser);
         }
     }
     
