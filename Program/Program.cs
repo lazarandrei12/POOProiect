@@ -136,6 +136,12 @@ class Program
                     }
                     break;
                 case "4":
+                    if (!user.Logat)
+                    {
+                        Console.WriteLine("Trebuie sa fiti logat pentru a efectua urmatoarele actiuni!");
+                        break;
+                    }
+                    
                     Console.WriteLine();
                     Console.WriteLine("1.Vizualizare masini disponibile pentru inchiriat");
                     Console.WriteLine("2.Inchiriere masina selectata");
@@ -157,7 +163,7 @@ class Program
                             if (int.TryParse(Console.ReadLine(), out numarulMasinii))
                             {
                                 var MasiniDisponibile = companie1.flota.Where(x => x.Valabilitate == true).ToList();
-                                if (numarulMasinii > 0 && numarulMasinii < MasiniDisponibile.Count)
+                                if (numarulMasinii > 0 && numarulMasinii <= MasiniDisponibile.Count)
                                 {
                                     var DeInchiriat = MasiniDisponibile[numarulMasinii - 1];
                                     DeInchiriat.Valabilitate = false;
