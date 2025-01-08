@@ -18,7 +18,7 @@ public class User
     public bool IsAdmin;
     public bool Logat;
     public static List<User> users = new List<User>();
-
+    public List<Inchirieri> IstoricInchirieri { get; set; } = new List<Inchirieri>();
     public User()
     {
         
@@ -61,7 +61,16 @@ public class User
             return;
         }
     }
-
+    public bool PoateInchiria()
+    {
+        return !IstoricInchirieri.Any(i => i.Daune);
+    }
+    
+    public void AdaugaIstoricInchirieri(Inchirieri inchirieri)
+    {
+        IstoricInchirieri.Add(inchirieri);
+    }    
+    
     public void SignUp()
     {
         Console.WriteLine("Creeare cont");
@@ -106,6 +115,25 @@ public class User
             };
             users.Add(newUser);
         }
+        
     }
-    
+    public void DetaliiUser()
+    {
+        Console.WriteLine("Detalii cont");
+        Console.WriteLine($"Username: {UsernameClient}");
+        Console.WriteLine($"Nume: {Nume}");
+        Console.WriteLine($"Numarul de inchirieri: {IstoricInchirieri.Count}");
+        if (IstoricInchirieri.Count > 0)
+        {
+            Console.WriteLine("Istoric inchiriei:");
+            foreach (var inchirierile in IstoricInchirieri)
+            {
+                inchirierile.AfiseazaDetalii();
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nu exista inchirieri pe acest nume");
+        }
+    }
 }

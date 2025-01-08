@@ -9,15 +9,15 @@ namespace Program.clase;
 
 public class Inchirieri
 {
-    public Client client;
+    public User User;
     public Masina masina;
     public DateOnly InceputInchiriere;
     public DateOnly FinalInchiriere;
     public double pretTotal;
     public bool Daune;
-    public Inchirieri(Client client, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool daune)
+    public Inchirieri(User user, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool daune)
     {
-        this.client = client;
+        this.User = user;
         this.masina = masina;
         this.InceputInchiriere = inceputInchiriere;
         this.FinalInchiriere = finalInchiriere;
@@ -38,7 +38,7 @@ public class Inchirieri
 
     public override string ToString()
     {
-        return $"Client: {client.Nume}, Masina: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}, Perioada inchirierii: {InceputInchiriere}-{FinalInchiriere}, Daune: {Daune}";
+        return $"Client: {User.Nume}, Masina: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}, Perioada inchirierii: {InceputInchiriere}-{FinalInchiriere}, Daune: {Daune}";
     }
 
     public void ValidareDate(DateOnly InceputInchiriere, DateOnly FinalInchiriere)
@@ -64,9 +64,5 @@ public class Inchirieri
         }
         Console.WriteLine();
     }
-
-    public void Inapoiere()
-    {
-        
-    }
+    
 }

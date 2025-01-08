@@ -48,9 +48,9 @@ class Program
     {
         CompanieInchirieri companie1 = new CompanieInchirieri("pipepepuRent", "timisoara", 12345);
         List<Masina> masini = IncarcaMasiniDinFisier();
-        Client client1 = new Client("Belg David", "1234567891023");
-        Client client2 = new Client("Basholin Darius", "2256784517896");
-        Client client3 = new Client("Laser Andrew", "5423224517896");
+        User User1 = new User();
+        User User2 = new User();
+        User User3 = new User();
         Masina car1 = new MasinaElectric("Tesla", "Y", 2019, 10000, "CJ-15-MUE", true, 100);
         Masina car2 = new MasinaElectric("Dacia", "Sandero", 2021, 2414, "CJ-15-MIL", true, 80);
         Masina car3 = new MasinaStandard("Audi", "A5", 2015, 150000, "AG-23-SUJ", true, 150);
@@ -64,10 +64,10 @@ class Program
         masini.Add(car3);
         masini.Add(car4);
         SalveazaMasiniInFisier(masini);
-        Inchirieri inchirirere1 = new Inchirieri(client1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"), true);
-        Inchirieri inchirirere2 = new Inchirieri(client2, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), true);
+        Inchirieri inchirirere1 = new Inchirieri(User1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"), true);
+        Inchirieri inchirirere2 = new Inchirieri(User1, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), true);
         companie1.AdaugaInchiriere(inchirirere1);
-        client1.AdaugaIstoricInchirieri(inchirirere1);
+        User1.AdaugaIstoricInchirieri(inchirirere1);
         companie1.AdaugaInchiriere(inchirirere2);
         inchirirere1.AfiseazaDetalii();
         inchirirere2.AfiseazaDetalii();
@@ -91,9 +91,12 @@ class Program
             switch (optiune)
             {
                 case "1":
-                    SalveazaMasiniInFisier(masini);
                     Console.WriteLine();
                     Console.WriteLine("Masini pt inchiriere:");
+                    var masiniFaraDuplicate = masini
+                        .GroupBy(m => m.NumarInmatriculare)
+                        .Select(g => g.First())
+                        .ToList();
                     foreach (var masina in masini)
                     {
                         if (masina.Valabilitate == true)
@@ -213,7 +216,7 @@ class Program
                             int numarulMasinii;
                             if (int.TryParse(Console.ReadLine(), out numarulMasinii))
                             {
-                                var MasiniDisponibile = companie1.flota.Where(x => x.Valabilitate == true).ToList();
+                                var MasiniDisponibile = companie1.flota.Where(x => x.Valabilitate).ToList();
                                 if (numarulMasinii > 0 && numarulMasinii <= MasiniDisponibile.Count)
                                 {
                                     var DeInchiriat = MasiniDisponibile[numarulMasinii - 1];
@@ -268,14 +271,18 @@ class Program
                     }
                     break;
                 case "6":
-                    Console.WriteLine();
-                    Console.WriteLine($"ISTORIC INCHIRIERI CLIENT {client1.Nume} :");
-                    i = 1;
-                    foreach (var inchiriere in client1.IstoricInchirieri)
+                    Console.WriteLine("Introdu numele userului: ");
+                    string numele = Console.ReadLine();
+                    var Gasit = User.users.FirstOrDefault(u => u.Nume.ToLower() == numele.ToLower());
+                    if (Gasit != null)
                     {
-                        Console.WriteLine($"{i}. {client1.IstoricInchirieri[i - 1]}");
-                        i++;
+                        Gasit.DetaliiUser();
                     }
+                    else
+                    {
+                       Console.WriteLine("Clientul nu a fost gasit");
+                    }
+                       
                     break;
                 case "7":
                     break;

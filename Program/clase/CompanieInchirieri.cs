@@ -32,7 +32,7 @@ public class CompanieInchirieri
     public void AdaugaInchiriere(Inchirieri inchiriere)
     {
         inchiriate.Add(inchiriere);
-        Console.WriteLine($"Client: {inchiriere.client.Nume}, Masina: {inchiriere.masina.Marca} {inchiriere.masina.Model} {inchiriere.masina.NumarInmatriculare}, Durata: {inchiriere.InceputInchiriere}-{inchiriere.FinalInchiriere}");
+        Console.WriteLine($"Client: {inchiriere.User.Nume}, Masina: {inchiriere.masina.Marca} {inchiriere.masina.Model} {inchiriere.masina.NumarInmatriculare}, Durata: {inchiriere.InceputInchiriere}-{inchiriere.FinalInchiriere}");
         Console.WriteLine();
     }
 
