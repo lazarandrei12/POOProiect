@@ -1,5 +1,9 @@
 using System.Text.RegularExpressions;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace Program.clase;
 
 public abstract class Masina
@@ -12,6 +16,9 @@ public abstract class Masina
     public string NumarInmatriculare { get; private set; }
     public bool Valabilitate { get; set; }
     public int CostBaza { get; private set; }
+    [JsonIgnore] 
+    public virtual string TypeDiscriminator => "Masina";
+
     public Masina (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
     {
         

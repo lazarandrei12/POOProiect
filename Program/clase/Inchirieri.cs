@@ -1,6 +1,10 @@
 using System.Runtime.ConstrainedExecution;
 using System.Threading.Channels;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace Program.clase;
 
 public class Inchirieri
@@ -59,5 +63,10 @@ public class Inchirieri
             Console.WriteLine($"Masina {masina.Marca} {masina.Model} {masina.NumarInmatriculare} este valabilă pentru închiriere");
         }
         Console.WriteLine();
+    }
+
+    public void Inapoiere()
+    {
+        
     }
 }

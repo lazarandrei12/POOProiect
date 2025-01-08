@@ -1,5 +1,9 @@
 ﻿using System.Globalization;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.ComponentModel.Design;
 using Program.clase;
 
@@ -7,20 +11,59 @@ namespace Program;
 
 class Program
 {
+    static string filePath = "masini.json";
+    
+    class MasinaJsonConverter : JsonConverter<Masina>
+    {
+        public override Masina Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            using var doc = JsonDocument.ParseValue(ref reader);
+            var root = doc.RootElement;
+
+            if (!root.TryGetProperty("TypeDiscriminator", out JsonElement typeElement))
+            {
+                throw new JsonException("Missing TypeDiscriminator property.");
+            }
+
+            string type = typeElement.GetString();
+            switch (type)
+            {
+                case "MasinaStandard":
+                    return JsonSerializer.Deserialize<MasinaStandard>(root.GetRawText(), options);
+                case "MasinaElectric":
+                    return JsonSerializer.Deserialize<MasinaElectric>(root.GetRawText(), options);
+                default:
+                    Console.WriteLine($"Unknown TypeDiscriminator: {type}");
+                    throw new JsonException($"Unknown TypeDiscriminator: {type}");
+            }
+        }
+
+
+        public override void Write(Utf8JsonWriter writer, Masina value, JsonSerializerOptions options)
+        {
+            JsonSerializer.Serialize(writer, (object)value, value.GetType(), options);
+        }
+    }
     static void Main(string[] args)
     {
         CompanieInchirieri companie1 = new CompanieInchirieri("pipepepuRent", "timisoara", 12345);
+        List<Masina> masini = IncarcaMasiniDinFisier();
         Client client1 = new Client("Belg David", "1234567891023");
         Client client2 = new Client("Basholin Darius", "2256784517896");
         Client client3 = new Client("Laser Andrew", "5423224517896");
         Masina car1 = new MasinaElectric("Tesla", "Y", 2019, 10000, "CJ-15-MUE", true, 100);
-        Masina car2 = new MasinaElectric("Dacia", "Sandero", 2021, 2414, "CJ-15-MIL", false, 80);
+        Masina car2 = new MasinaElectric("Dacia", "Sandero", 2021, 2414, "CJ-15-MIL", true, 80);
         Masina car3 = new MasinaStandard("Audi", "A5", 2015, 150000, "AG-23-SUJ", true, 150);
         Masina car4 = new MasinaStandard("BMW", "M3 Competition", 2020, 56000, "AG-23-SUJ", true, 230);
         companie1.AdaugaMasina(car1);
         companie1.AdaugaMasina(car2);
         companie1.AdaugaMasina(car3);
         companie1.AdaugaMasina(car4);
+        masini.Add(car1);
+        masini.Add(car2);
+        masini.Add(car3);
+        masini.Add(car4);
+        SalveazaMasiniInFisier(masini);
         Inchirieri inchirirere1 = new Inchirieri(client1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"), true);
         Inchirieri inchirirere2 = new Inchirieri(client2, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), true);
         companie1.AdaugaInchiriere(inchirirere1);
@@ -48,9 +91,10 @@ class Program
             switch (optiune)
             {
                 case "1":
+                    SalveazaMasiniInFisier(masini);
                     Console.WriteLine();
                     Console.WriteLine("Masini pt inchiriere:");
-                    foreach (var masina in companie1.flota)
+                    foreach (var masina in masini)
                     {
                         if (masina.Valabilitate == true)
                         {
@@ -101,11 +145,13 @@ class Program
                                 string TipMasina = Console.ReadLine();
                                 if (TipMasina.ToLower() == "standard")
                                 {
-                                    MasinaStandard.CitireMasinaDeLaTastatura();
+                                    masini.Add(MasinaStandard.CitireMasinaDeLaTastatura());
+                                    SalveazaMasiniInFisier(masini);
                                 }
                                 else if (TipMasina.ToLower() == "electric")
                                 {
-                                    MasinaElectric.CitireMasinaDeLaTastatura();
+                                    masini.Add(MasinaElectric.CitireMasinaDeLaTastatura());
+                                    SalveazaMasiniInFisier(masini);
                                 }
                                 else
                                 {
@@ -145,16 +191,21 @@ class Program
                     Console.WriteLine();
                     Console.WriteLine("1.Vizualizare masini disponibile pentru inchiriat");
                     Console.WriteLine("2.Inchiriere masina selectata");
-                    Console.WriteLine("3.Inapoiere mașină");
+                    Console.WriteLine("3.Inapoiere masină");
                     Console.WriteLine("Alegeti o optiune: ");
                     string optiune3 = Console.ReadLine();
                     switch (optiune3)
                     {
                         case "1":
-                            Console.WriteLine("Masinile disponibile sunt: ");
-                            foreach (var masina in companie1.flota)
+                            SalveazaMasiniInFisier(masini);
+                            Console.WriteLine();
+                            Console.WriteLine("Masini pt inchiriere:");
+                            foreach (var masina in masini)
                             {
-                                masina.AfiseazaDateMasina();
+                                if (masina.Valabilitate == true)
+                                {
+                                    masina.AfiseazaDateMasina();
+                                }
                             }
                             break;
                         case "2":
@@ -236,5 +287,35 @@ class Program
                     break;
             }
         }
-    } 
+        static void SalveazaMasiniInFisier(List<Masina> masini)
+        {
+            List<Masina> masiniFaraDuplicate = masini
+                .GroupBy(m => m.NumarInmatriculare)
+                .Select(g => g.First()) // Take the first car in each group of duplicates
+                .ToList();
+
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new MasinaJsonConverter() },
+                WriteIndented = true
+            };
+            string json = JsonSerializer.Serialize(masiniFaraDuplicate, options);
+            File.WriteAllText(filePath, json);
+        }
+
+        static List<Masina> IncarcaMasiniDinFisier()
+        {
+            if (File.Exists(filePath))
+            {
+                string json = File.ReadAllText(filePath);
+                var options = new JsonSerializerOptions
+                {
+                    Converters = { new MasinaJsonConverter() },
+                    WriteIndented = true
+                };
+                return JsonSerializer.Deserialize<List<Masina>>(json, options) ?? new List<Masina>();
+            }
+            return new List<Masina>();
+        }
+    }
 }

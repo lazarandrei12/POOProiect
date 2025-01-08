@@ -1,9 +1,14 @@
 namespace Program.clase;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 public class MasinaElectric : Masina
 {
     public MasinaElectric (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza) : base(marca, model, anDeFabricatie, kilometraj, numarInmatriculare, valabilitate, costBaza) {}
     
+    public override string TypeDiscriminator => "MasinaElectric";
     public override double CostInchirierePeZi()
     {
         return CostBaza + 50;
