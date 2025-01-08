@@ -48,7 +48,16 @@ class Program
     {
         CompanieInchirieri companie1 = new CompanieInchirieri("pipepepuRent", "timisoara", 12345);
         List<Masina> masini = IncarcaMasiniDinFisier();
-        User User1 = new User();
+        User User1 = new User()
+        {
+            UsernameClient = "relu",
+            ParolaClient = "viru",
+            Nume = "Ion",
+            Cnp = "1234123412342",
+            IsAdmin = false,
+            Logat = false
+        };
+        User.users.Add(User1);
         User User2 = new User();
         User User3 = new User();
         Masina car1 = new MasinaElectric("Tesla", "Y", 2019, 10000, "CJ-15-MUE", true, 100);
@@ -59,10 +68,6 @@ class Program
         companie1.AdaugaMasina(car2);
         companie1.AdaugaMasina(car3);
         companie1.AdaugaMasina(car4);
-        masini.Add(car1);
-        masini.Add(car2);
-        masini.Add(car3);
-        masini.Add(car4);
         SalveazaMasiniInFisier(masini);
         Inchirieri inchirirere1 = new Inchirieri(User1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"), true);
         Inchirieri inchirirere2 = new Inchirieri(User1, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), true);
@@ -200,14 +205,16 @@ class Program
                     switch (optiune3)
                     {
                         case "1":
-                            SalveazaMasiniInFisier(masini);
                             Console.WriteLine();
                             Console.WriteLine("Masini pt inchiriere:");
+                            int index = 1;
                             foreach (var masina in masini)
                             {
-                                if (masina.Valabilitate == true)
+                                if (masina.Valabilitate)
                                 {
+                                    Console.Write($"{index}. ");
                                     masina.AfiseazaDateMasina();
+                                    index++;
                                 }
                             }
                             break;
@@ -273,7 +280,7 @@ class Program
                 case "6":
                     Console.WriteLine("Introdu numele userului: ");
                     string numele = Console.ReadLine();
-                    var Gasit = User.users.FirstOrDefault(u => u.Nume.ToLower() == numele.ToLower());
+                    var Gasit = User.users.FirstOrDefault(u => u.UsernameClient.ToLower() == numele.ToLower());
                     if (Gasit != null)
                     {
                         Gasit.DetaliiUser();
