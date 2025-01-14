@@ -104,7 +104,7 @@ class Program
                         .ToList();
                     foreach (var masina in masini)
                     {
-                        if (masina.Valabilitate == true)
+                        if (masina.Valabilitate)
                         {
                             masina.AfiseazaDateMasina();
                         }
@@ -168,19 +168,21 @@ class Program
 
                                 break;
                             case "2":
-                                Console.WriteLine("Doresti sa adaugi o masina standard sau electric?");
-                                TipMasina = Console.ReadLine();
-                                if (TipMasina.ToLower() == "standard")
+                                Console.WriteLine("Introduceti numarul de inmatriculare al masinii de sters:");
+                                string numarInmatriculare = Console.ReadLine();
+    
+                                var masinaDeSters = masini.FirstOrDefault(m => 
+                                    string.Equals(m.NumarInmatriculare, numarInmatriculare, StringComparison.OrdinalIgnoreCase));
+    
+                                if (masinaDeSters != null)
                                 {
-                                    MasinaStandard.StergeMasina(masiniS);
-                                }
-                                else if (TipMasina.ToLower() == "electric")
-                                {
-                                    MasinaElectric.StergeMasina(masiniE);
+                                    masini.Remove(masinaDeSters);
+                                    SalveazaMasiniInFisier(masini);
+                                    Console.WriteLine($"Masina cu numarul de inmatriculare {numarInmatriculare} a fost stearsa.");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Tipul de masina nu este valid");
+                                    Console.WriteLine($"Nu s-a gasit masina cu numarul de inmatriculare {numarInmatriculare}.");
                                 }
                                 break;
                             case "3":

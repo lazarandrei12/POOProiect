@@ -52,19 +52,4 @@ public class MasinaStandard : Masina
 
         return new MasinaStandard(marca, model, anDeFabricatie, kilometraj, numarInmatriculare, valabilitate, costBaza);
     }
-    public static void StergeMasina(List<MasinaStandard> masini)
-    {
-        Console.WriteLine("Introdu numarul de inmatriculare al masinii de sters:");
-        string numarInmatriculare = Console.ReadLine();
-        MasinaStandard masinaDeSters = masini.FirstOrDefault(m => m.NumarInmatriculare == numarInmatriculare);
-        if (masinaDeSters != null)
-        {
-            masini.Remove(masinaDeSters);
-            Console.WriteLine("Masina a fost stearsa cu succes.");
-        }
-        else
-        {
-            Console.WriteLine("Nu s-a gasit nicio masina cu acest numar de inmatriculare.");
-        }
-    }
 }
