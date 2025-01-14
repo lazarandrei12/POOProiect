@@ -11,8 +11,9 @@ namespace Program;
 
 class Program
 {
-    static string filePath = "masini.json";
+    static string userFilePath = "users.json";
     
+    static string masinaFilePath = "masini.json";
     class MasinaJsonConverter : JsonConverter<Masina>
     {
         public override Masina Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -54,8 +55,7 @@ class Program
             ParolaClient = "viru",
             Nume = "Ion",
             Cnp = "1234123412342",
-            IsAdmin = false,
-            Logat = false
+            IsAdmin = false
         };
         User.users.Add(User1);
         User User2 = new User();
@@ -102,11 +102,14 @@ class Program
                         .GroupBy(m => m.NumarInmatriculare)
                         .Select(g => g.First())
                         .ToList();
+                    int index1 = 1;
                     foreach (var masina in masini)
                     {
                         if (masina.Valabilitate)
                         {
+                            Console.Write($"{index1}. ");
                             masina.AfiseazaDateMasina();
+                            index1++;
                         }
                     }
                     break;
@@ -135,8 +138,6 @@ class Program
                         Console.WriteLine("optiune valabila doar pentru admini;");
                         break;
                     }
-                    List<MasinaStandard> masiniS = new List<MasinaStandard>();
-                    List<MasinaElectric> masiniE = new List<MasinaElectric>();
                     bool exit1 = false;
                     while (!exit1)
                     {
@@ -225,11 +226,12 @@ class Program
                             int numarulMasinii;
                             if (int.TryParse(Console.ReadLine(), out numarulMasinii))
                             {
-                                var MasiniDisponibile = companie1.flota.Where(x => x.Valabilitate).ToList();
+                                var MasiniDisponibile = masini.Where(x => x.Valabilitate).ToList();
                                 if (numarulMasinii > 0 && numarulMasinii <= MasiniDisponibile.Count)
                                 {
                                     var DeInchiriat = MasiniDisponibile[numarulMasinii - 1];
                                     DeInchiriat.Valabilitate = false;
+                                    SalveazaMasiniInFisier(masini);
                                     Console.WriteLine("Vehicul inchiriat");
                                 }
                                 else
@@ -247,10 +249,11 @@ class Program
                             string Confirmare  = Console.ReadLine();
                             if (Confirmare.ToLower() == "da")
                             {
-                                var MasinaInchriata = companie1.flota.FirstOrDefault(x => !x.Valabilitate);
+                                var MasinaInchriata = masini.FirstOrDefault(x => !x.Valabilitate);
                                 if (MasinaInchriata != null)
                                 {
                                     MasinaInchriata.Valabilitate = true;
+                                    SalveazaMasiniInFisier(masini);
                                     Console.WriteLine("Masina a fost returnata cu succes!");
                                 }
                                 else
@@ -307,7 +310,7 @@ class Program
         {
             List<Masina> masiniFaraDuplicate = masini
                 .GroupBy(m => m.NumarInmatriculare)
-                .Select(g => g.First()) // Take the first car in each group of duplicates
+                .Select(g => g.First()) 
                 .ToList();
 
             var options = new JsonSerializerOptions
@@ -316,14 +319,14 @@ class Program
                 WriteIndented = true
             };
             string json = JsonSerializer.Serialize(masiniFaraDuplicate, options);
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(masinaFilePath, json);
         }
 
         static List<Masina> IncarcaMasiniDinFisier()
         {
-            if (File.Exists(filePath))
+            if (File.Exists(masinaFilePath))
             {
-                string json = File.ReadAllText(filePath);
+                string json = File.ReadAllText(masinaFilePath);
                 var options = new JsonSerializerOptions
                 {
                     Converters = { new MasinaJsonConverter() },
@@ -332,6 +335,26 @@ class Program
                 return JsonSerializer.Deserialize<List<Masina>>(json, options) ?? new List<Masina>();
             }
             return new List<Masina>();
+        }
+        
+        static void SalveazaUsersInFisier(List<User> users, string filePath)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            string json = JsonSerializer.Serialize(users, options);
+            File.WriteAllText(filePath, json);
+            Console.WriteLine("Lista de utilizatori a fost salvată cu succes!");
+        }
+        static List<User> IncarcaUsersDinFisier()
+        {
+            if (File.Exists(userFilePath))
+            {
+                string json = File.ReadAllText(userFilePath);
+                return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
+            }
+            return new List<User>();
         }
     }
 }
