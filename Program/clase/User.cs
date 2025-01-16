@@ -130,10 +130,10 @@ public class User
         }
     }
 
-    public bool PoateInchiria()
-    {
-        return !IstoricInchirieri.Any(i => i.Daune);
-    }
+    //public bool PoateInchiria()
+    //{
+    //    return !IstoricInchirieri.Any(i => i.Daune);
+    //}
 
     public void AdaugaIstoricInchirieri(Inchirieri inchirieri)
     {

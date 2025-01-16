@@ -14,15 +14,12 @@ public class Inchirieri
     public DateOnly InceputInchiriere;
     public DateOnly FinalInchiriere;
     public double pretTotal;
-    public bool Daune;
-    public Inchirieri(User user, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere,bool daune)
+    public Inchirieri(User user, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere)
     {
         this.User = user;
         this.masina = masina;
         this.InceputInchiriere = inceputInchiriere;
         this.FinalInchiriere = finalInchiriere;
-        this.Daune = daune;
-
         AfiseazaPret();
     }
     
@@ -38,7 +35,7 @@ public class Inchirieri
 
     public override string ToString()
     {
-        return $"Client: {User.Nume}, Masina: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}, Perioada inchirierii: {InceputInchiriere}-{FinalInchiriere}, Daune: {Daune}";
+        return $"Client: {User.Nume}, Masina: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}, Perioada inchirierii: {InceputInchiriere}-{FinalInchiriere}";
     }
 
     public void ValidareDate(DateOnly InceputInchiriere, DateOnly FinalInchiriere)

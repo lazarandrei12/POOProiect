@@ -69,13 +69,11 @@ class Program
         companie1.AdaugaMasina(car3);
         companie1.AdaugaMasina(car4);
         SalveazaMasiniInFisier(masini);
-        Inchirieri inchirirere1 = new Inchirieri(User1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"), true);
-        Inchirieri inchirirere2 = new Inchirieri(User1, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"), true);
+        Inchirieri inchirirere1 = new Inchirieri(User1, car2, DateOnly.Parse("2024-10-5"), DateOnly.Parse("2024-10-15"));
+        Inchirieri inchirirere2 = new Inchirieri(User1, car3, DateOnly.Parse("2024-10-18"), DateOnly.Parse("2025-1-25"));
         companie1.AdaugaInchiriere(inchirirere1);
         User1.AdaugaIstoricInchirieri(inchirirere1);
         companie1.AdaugaInchiriere(inchirirere2);
-        inchirirere1.AfiseazaDetalii();
-        inchirirere2.AfiseazaDetalii();
         User user = new User();
 
         bool exit = false;
