@@ -32,7 +32,7 @@ public class User
 
     }
 
-    private static void IncarcaUseriDinFisier()
+    public static void IncarcaUseriDinFisier()
     {
         if (File.Exists(userFilePath))
         {
@@ -55,17 +55,28 @@ public class User
                         Nume = dto.Nume,
                         Cnp = dto.Cnp,
                         IsAdmin = dto.IsAdmin,
+                        IstoricInchirieri = dto.IstoricInchirieri.Select(i => new Inchirieri(
+                            new User { Nume = i.NumeClient, UsernameClient = i.UsernameClient },
+                            new MasinaStandard(i.MarcaMasina, i.ModelMasina, 0, 0, i.NumarInmatriculare, true, 0),
+                            DateOnly.Parse(i.DataInceput),
+                            DateOnly.Parse(i.DataSfarsit)
+                        )).ToList()
                     }).ToList();
                 }
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
+                Console.WriteLine($"Eroare la deserializarea utilizatorilor: {ex.Message}");
                 users = new List<User>();
             }
         }
+        else
+        {
+            users = new List<User>();
+        }
     }
 
-    private static void SalveazaUseriInFisier()
+    public static void SalveazaUseriInFisier()
     {
         var options = new JsonSerializerOptions
         {
@@ -73,13 +84,24 @@ public class User
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         
-        var useriPentruSalvare = users.Select(u => new
+        var useriPentruSalvare = users.Select(u => new UserDTO
         {
-            u.UsernameClient,
-            u.ParolaClient,
-            u.Nume,
-            u.Cnp,
-            u.IsAdmin
+            UsernameClient = u.UsernameClient,
+            ParolaClient = u.ParolaClient,
+            Nume = u.Nume,
+            Cnp = u.Cnp,
+            IsAdmin = u.IsAdmin,
+            IstoricInchirieri = u.IstoricInchirieri.Select(i => new InchiriereDTO
+            {
+                NumeClient = i.User.Nume,
+                UsernameClient = i.User.UsernameClient,
+                MarcaMasina = i.masina.Marca,
+                ModelMasina = i.masina.Model,
+                NumarInmatriculare = i.masina.NumarInmatriculare,
+                DataInceput = i.InceputInchiriere.ToString(),
+                DataSfarsit = i.FinalInchiriere.ToString(),
+                PretTotal = i.pretTotal
+            }).ToList()
         }).ToList();
         
         string json = JsonSerializer.Serialize(useriPentruSalvare, options);
@@ -123,20 +145,13 @@ public class User
         {
             SignUp();
         }
-
-        if (raspuns.ToLower() == "nu")
-        {
-            return;
-        }
     }
-
-    //public bool PoateInchiria()
-    //{
-    //    return !IstoricInchirieri.Any(i => i.Daune);
-    //}
-
     public void AdaugaIstoricInchirieri(Inchirieri inchirieri)
     {
+        if (IstoricInchirieri == null)
+        {
+            IstoricInchirieri = new List<Inchirieri>();
+        }
         IstoricInchirieri.Add(inchirieri);
     }
     private class UserDTO
@@ -146,6 +161,7 @@ public class User
         public string Nume { get; set; }
         public string Cnp { get; set; }
         public bool IsAdmin { get; set; }
+        public List<InchiriereDTO> IstoricInchirieri { get; set; } = new List<InchiriereDTO>();
     }
     public void SignUp()
     {

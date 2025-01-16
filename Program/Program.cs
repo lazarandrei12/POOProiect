@@ -228,44 +228,48 @@ class Program
                                 if (numarulMasinii > 0 && numarulMasinii <= MasiniDisponibile.Count)
                                 {
                                     var DeInchiriat = MasiniDisponibile[numarulMasinii - 1];
-                                    DeInchiriat.Valabilitate = false;
-                                    SalveazaMasiniInFisier(masini);
-                                    Console.WriteLine("Vehicul inchiriat");
+                                    
+                                    Console.WriteLine("Introduceti data de inceput (format: YYYY-MM-DD): ");
+                                    if (DateOnly.TryParse(Console.ReadLine(), out DateOnly dataInceput))
+                                    {
+                                        Console.WriteLine("Introduceti data de sfarsit (format: YYYY-MM-DD): ");
+                                        if (DateOnly.TryParse(Console.ReadLine(), out DateOnly dataSfarsit))
+                                        {
+                                            var inchiriereNoua = new Inchirieri(user, DeInchiriat, dataInceput, dataSfarsit);
+                                            
+                                            DeInchiriat.Valabilitate = false;
+                                            SalveazaMasiniInFisier(masini);
+                                            
+                                            companie1.AdaugaInchiriere(inchiriereNoua);
+                                            
+                                            user.AdaugaIstoricInchirieri(inchiriereNoua);
+                                            User.SalveazaUseriInFisier();
+                                            
+                                            var inchirieriExistente = Inchirieri.IncarcaInchirieriDinFisier();
+                                            inchirieriExistente.Add(inchiriereNoua);
+                                            Inchirieri.SalveazaInchirieriInFisier(inchirieriExistente);
+                                            
+                                            Console.WriteLine("Vehicul închiriat cu succes!");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Format dată invalid pentru data de sfârșit!");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Format dată invalid pentru data de început!");
+                                    }
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Numar invalid ");
-                                }
-                            }
-                            else
-                                {
-                                    Console.WriteLine("Dati un numar valid");
-                                }
-                            break;
-                        case "3":
-                            Console.WriteLine("Doriti sa returnati masina inchiriata?");
-                            string Confirmare  = Console.ReadLine();
-                            if (Confirmare.ToLower() == "da")
-                            {
-                                var MasinaInchriata = masini.FirstOrDefault(x => !x.Valabilitate);
-                                if (MasinaInchriata != null)
-                                {
-                                    MasinaInchriata.Valabilitate = true;
-                                    SalveazaMasiniInFisier(masini);
-                                    Console.WriteLine("Masina a fost returnata cu succes!");
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Nu ati inchirirat nicio masina.");
+                                    Console.WriteLine("Număr invalid de mașină!");
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("Inapoiere invalida!");
+                                Console.WriteLine("Vă rugăm introduceți un număr valid!");
                             }
-                            break;
-                        default:
-                            Console.WriteLine("Optiune invalida");
                             break;
                             
                     }
@@ -283,24 +287,32 @@ class Program
                 case "6":
                     Console.WriteLine("Introdu numele userului: ");
                     string numele = Console.ReadLine();
-                    var Gasit = User.users.FirstOrDefault(u => u.UsernameClient.ToLower() == numele.ToLower());
+                    User.IncarcaUseriDinFisier();
+                    var Gasit = User.users.FirstOrDefault(u => u.UsernameClient.Equals(numele, StringComparison.OrdinalIgnoreCase));
                     if (Gasit != null)
                     {
-                        Gasit.DetaliiUser();
+                        Console.WriteLine("Detalii cont");
+                        Console.WriteLine($"Username: {Gasit.UsernameClient}");
+                        Console.WriteLine($"Nume: {Gasit.Nume}");
+                        Console.WriteLine($"Numărul de închirieri: {Gasit.IstoricInchirieri.Count}");
+
+                        if (Gasit.IstoricInchirieri.Count > 0)
+                        {
+                            Console.WriteLine("Istoric închirieri:");
+                            foreach (var inchiriere in Gasit.IstoricInchirieri)
+                            {
+                                inchiriere.AfiseazaDetalii();
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nu există închirieri pe acest nume");
+                        }
                     }
                     else
                     {
-                       Console.WriteLine("Clientul nu a fost gasit");
+                        Console.WriteLine("Clientul nu a fost găsit");
                     }
-                       
-                    break;
-                case "7":
-                    break;
-                case "8":
-                    exit = true;
-                    break;
-                default:
-                    Console.WriteLine("optiune incorecta");
                     break;
             }
         }
@@ -333,26 +345,6 @@ class Program
                 return JsonSerializer.Deserialize<List<Masina>>(json, options) ?? new List<Masina>();
             }
             return new List<Masina>();
-        }
-        
-        static void SalveazaUsersInFisier(List<User> users, string filePath)
-        {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            string json = JsonSerializer.Serialize(users, options);
-            File.WriteAllText(filePath, json);
-            Console.WriteLine("Lista de utilizatori a fost salvată cu succes!");
-        }
-        static List<User> IncarcaUsersDinFisier()
-        {
-            if (File.Exists(userFilePath))
-            {
-                string json = File.ReadAllText(userFilePath);
-                return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
-            }
-            return new List<User>();
         }
     }
 }
