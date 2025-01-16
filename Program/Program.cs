@@ -243,6 +243,11 @@ class Program
                                             companie1.AdaugaInchiriere(inchiriereNoua);
                                             
                                             user.AdaugaIstoricInchirieri(inchiriereNoua);
+                                            Console.WriteLine("Istoric înainte de salvare:");
+                                            foreach (var inchiriere in user.IstoricInchirieri)
+                                            {
+                                                Console.WriteLine(inchiriere);
+                                            }
                                             User.SalveazaUseriInFisier();
                                             
                                             var inchirieriExistente = Inchirieri.IncarcaInchirieriDinFisier();
@@ -332,7 +337,7 @@ class Program
 
                     double castigtotal = 0;
                     Console.WriteLine($"Inchirieri active si castiguri pentru data: {DataZiSpecifica}");
-    
+
                     foreach (var inchirie in Active)
                     {
                         double CostZilnic = inchirie.masina.CostInchirierePeZi();
@@ -344,13 +349,12 @@ class Program
                 case "8":
                     exit = true;
                     break;
-                    
-                    default:
-                        Console.WriteLine("Optiune incorecta!");
-                        break;
+
+                default:
+                    Console.WriteLine("Optiune incorecta!");
+                    break;
             }
         }
-        
         static void SalveazaMasiniInFisier(List<Masina> masini)
         {
             List<Masina> masiniFaraDuplicate = masini
