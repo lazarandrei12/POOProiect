@@ -95,11 +95,11 @@ public abstract class Masina
         
         if (!AfiseazaValabilitate())
         {
-            Console.WriteLine($"Masina {Marca} {Model} {NumarInmatriculare} este deja închiriată");
+            Console.WriteLine($"Masina {Marca} {Model} {NumarInmatriculare} este deja inchiriata");
         }
         else
         {
-            Console.WriteLine("Este valabilă pentru închiriere");
+            Console.WriteLine("Este valabila pentru inchiriere");
         }
         Console.WriteLine();
     }

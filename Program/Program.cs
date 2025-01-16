@@ -195,7 +195,7 @@ class Program
                     Console.WriteLine();
                     Console.WriteLine("1.Vizualizare masini disponibile pentru inchiriat");
                     Console.WriteLine("2.Inchiriere masina selectata");
-                    Console.WriteLine("3.Inapoiere masină");
+                    Console.WriteLine("3.Inapoiere masina");
                     Console.WriteLine("Alegeti o optiune: ");
                     string optiune3 = Console.ReadLine();
                     switch (optiune3)
@@ -217,7 +217,7 @@ class Program
                         case "2":
                             if (user.Daune)
                             {
-                                Console.WriteLine("Accesul la închirierea unei mașini este interzis pentru dumneavoastră, deoarece ați cauzat daune în trecut.");
+                                Console.WriteLine("Accesul la inchirierea unei masini este interzis pentru dumneavoastra, deoarece ati cauzat daune in trecut.");
                                 break;
                             }
                             Console.WriteLine("Selectati numarul masinii pe care vreti sa o inchiriati ");
@@ -243,7 +243,7 @@ class Program
                                             companie1.AdaugaInchiriere(inchiriereNoua);
                                             
                                             user.AdaugaIstoricInchirieri(inchiriereNoua);
-                                            Console.WriteLine("Istoric înainte de salvare:");
+                                            Console.WriteLine("Istoric inainte de salvare:");
                                             foreach (var inchiriere in user.IstoricInchirieri)
                                             {
                                                 Console.WriteLine(inchiriere);
@@ -254,31 +254,31 @@ class Program
                                             inchirieriExistenteV2.Add(inchiriereNoua);
                                             Inchirieri.SalveazaInchirieriInFisier(inchirieriExistenteV2);
                                             
-                                            Console.WriteLine("Vehicul închiriat cu succes!");
+                                            Console.WriteLine("Vehicul inchiriat cu succes!");
                                         }
                                         else
                                         {
-                                            Console.WriteLine("Format dată invalid pentru data de sfârșit!");
+                                            Console.WriteLine("Format data invalid pentru data de sfarsit!");
                                         }
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Format dată invalid pentru data de început!");
+                                        Console.WriteLine("Format data invalid pentru data de inceput!");
                                     }
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Număr invalid de mașină!");
+                                    Console.WriteLine("Numar invalid de masina!");
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("Vă rugăm introduceți un număr valid!");
+                                Console.WriteLine("Va rugam introduceti un numar valid!");
                             }
                             break;
                         
                         case "3":
-                            Console.WriteLine("Introduceți numărul de înmatriculare al mașinii pe care doriți să o returnați:");
+                            Console.WriteLine("Introduceti numarul de inmatriculare al masinii pe care doriti sa o returnati:");
                             string numarInmatriculare = Console.ReadLine();
                             
                             var inchiriereaGasita = user.IstoricInchirieri.FirstOrDefault(i =>
@@ -286,7 +286,7 @@ class Program
 
                             if (inchiriereaGasita == null)
                             {
-                                Console.WriteLine("Nu aveți închirierea acestei mașini sau mașina nu există.");
+                                Console.WriteLine("Nu aveti inchirierea acestei masini sau masina nu exista.");
                                 break;
                             }
 
@@ -295,27 +295,27 @@ class Program
 
                             if (masinaDeReturnat == null)
                             {
-                                Console.WriteLine("Mașina cu acest număr de înmatriculare nu a fost găsită.");
+                                Console.WriteLine("Masina cu acest numar de inmatriculare nu a fost gasita.");
                                 break;
                             }
 
                             if (masinaDeReturnat.Valabilitate)
                             {
-                                Console.WriteLine("Această mașină este deja returnată și disponibilă pentru închiriere.");
+                                Console.WriteLine("Aceasta masina este deja returnata si disponibila pentru inchiriere.");
                                 break;
                             }
 
                             masinaDeReturnat.Valabilitate = true;
                             SalveazaMasiniInFisier(masini);
 
-                            Console.WriteLine("Mașina a fost returnată cu succes.");
-                            Console.WriteLine("A existat vreo daună? (Da/Nu)");
+                            Console.WriteLine("Masina a fost returnata cu succes.");
+                            Console.WriteLine("A existat vreo dauna? (Da/Nu)");
 
                             string raspunsDauna = Console.ReadLine()?.ToLower();
                             if (raspunsDauna == "da")
                             {
                                 user.Daune = true;
-                                Console.WriteLine("Utilizatorul a fost marcat ca având daune și nu mai poate închiria alte mașini.");
+                                Console.WriteLine("Utilizatorul a fost marcat ca avand daune si nu mai poate inchiria alte masini.");
                             }
                             
                             User.SalveazaUseriInFisier();
@@ -343,11 +343,11 @@ class Program
                         Console.WriteLine("Detalii cont");
                         Console.WriteLine($"Username: {Gasit.UsernameClient}");
                         Console.WriteLine($"Nume: {Gasit.Nume}");
-                        Console.WriteLine($"Numărul de închirieri: {Gasit.IstoricInchirieri.Count}");
+                        Console.WriteLine($"Numarul de inchirieri: {Gasit.IstoricInchirieri.Count}");
 
                         if (Gasit.IstoricInchirieri.Count > 0)
                         {
-                            Console.WriteLine("Istoric închirieri:");
+                            Console.WriteLine("Istoric inchirieri:");
                             foreach (var inchiriere in Gasit.IstoricInchirieri)
                             {
                                 inchiriere.AfiseazaDetalii();
@@ -355,61 +355,55 @@ class Program
                         }
                         else
                         {
-                            Console.WriteLine("Nu există închirieri pe acest nume");
+                            Console.WriteLine("Nu exista inchirieri pe acest nume");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Clientul nu a fost găsit");
+                        Console.WriteLine("Clientul nu a fost gasit");
                     }
                     break;
                 case "7":
-                    Console.WriteLine("Introduceți data pentru care doriți să calculați costurile de închiriere (format: YYYY-MM-DD): ");
+                    Console.WriteLine("Introduceti data pentru care doriti sa calculati costurile de inchiriere (format: YYYY-MM-DD): ");
                     string dataString = Console.ReadLine();
 
                     if (!DateOnly.TryParse(dataString, out DateOnly dataCautata))
                     {
-                        Console.WriteLine("Format invalid pentru dată!");
+                        Console.WriteLine("Format invalid pentru data!");
                         break;
                     }
 
-                    // Încarcă toate închirierile din fișier
                     var inchirieriExistente = Inchirieri.IncarcaInchirieriDinFisier();
 
-                    // Filtrare: Găsește închirierile active pentru data specificată
                     var inchirieriActive = inchirieriExistente
                         .Where(i => i.InceputInchiriere <= dataCautata && dataCautata <= i.FinalInchiriere)
                         .ToList();
 
                     if (!inchirieriActive.Any())
                     {
-                        Console.WriteLine($"Nu există închirieri active pentru data {dataCautata}.");
+                        Console.WriteLine($"Nu exista inchirieri active pentru data {dataCautata}.");
                         break;
                     }
 
-                    // Calculează suma totală a costurilor pe zi pentru închirierile active
                     double sumaTotala = 0;
                     foreach (var inchiriere in inchirieriActive)
                     {
-                        // Calculăm durata închirierii
                         int durata = (inchiriere.FinalInchiriere.DayNumber - inchiriere.InceputInchiriere.DayNumber);
 
-                        // Verificăm dacă durata este validă
                         if (durata > 0)
                         {
                             double costPeZi = inchiriere.pretTotal / durata;
                             sumaTotala += costPeZi;
 
-                            // Debugging: Afișăm detalii pentru fiecare închiriere
-                            Console.WriteLine($"Inchiriere: {inchiriere.User.Nume}, Mașină: {inchiriere.masina.Marca}, Cost/zi: {costPeZi} lei.");
+                            Console.WriteLine($"Inchiriere: {inchiriere.User.Nume}, Masina: {inchiriere.masina.Marca}, Cost/zi: {costPeZi} lei.");
                         }
                         else
                         {
-                            Console.WriteLine($"Inchirierea cu mașina {inchiriere.masina.Marca} are o durată invalidă.");
+                            Console.WriteLine($"Inchirierea cu masina {inchiriere.masina.Marca} are o durata invalida.");
                         }
                     }
 
-                    Console.WriteLine($"Suma totală a costurilor de închiriere pe zi pentru data {dataCautata}: {sumaTotala} lei.");
+                    Console.WriteLine($"Suma totala a costurilor de inchiriere pe zi pentru data {dataCautata}: {sumaTotala} lei.");
                     break;
                 case "8":
                     exit = true;
@@ -427,7 +421,6 @@ class Program
                 WriteIndented = true
             };
 
-            // Creăm o listă de obiecte anonime care includ discriminatorul
             var masiniPentruSalvare = masini.Select(masina =>
             {
                 if (masina is MasinaStandard standard)
@@ -459,10 +452,9 @@ class Program
                     };
                 }
 
-                throw new InvalidOperationException("Tip necunoscut de mașină.");
+                throw new InvalidOperationException("Tip necunoscut de masina.");
             }).ToList();
-
-            // Serializăm mașinile cu discriminator
+            
             string json = JsonSerializer.Serialize(masiniPentruSalvare, options);
             File.WriteAllText("masini.json", json);
         }

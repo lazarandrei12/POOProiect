@@ -66,8 +66,8 @@ public class Inchirieri
 
     public void AfiseazaDetalii()
     {
-        Console.WriteLine($"Masina închiriată: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}");
-        Console.WriteLine($"Durata închirierii este de: {DurataInchirirere()} de zile");
+        Console.WriteLine($"Masina inchiriata: {masina.Marca} {masina.Model} {masina.NumarInmatriculare}");
+        Console.WriteLine($"Durata inchirierii este de: {DurataInchirirere()} de zile");
         Console.WriteLine($"Pretul total este de: {pretTotal} lei");
         Console.WriteLine();
     }
@@ -94,13 +94,13 @@ public class Inchirieri
                         new MasinaStandard(dto.MarcaMasina, dto.ModelMasina, 0, 0, dto.NumarInmatriculare, false, 0),
                         DateOnly.Parse(dto.DataInceput),
                         DateOnly.Parse(dto.DataSfarsit),
-                        dto.PretTotal // Transmitem pretTotal direct ca al cincilea parametru
+                        dto.PretTotal
                     )).ToList();
                 }
             }
             catch (JsonException ex)
             {
-                Console.WriteLine($"Eroare la încărcarea închirierilor: {ex.Message}");
+                Console.WriteLine($"Eroare la incarcarea inchirierilor: {ex.Message}");
             }
         }
         return new List<Inchirieri>();
@@ -112,7 +112,7 @@ public class Inchirieri
         {
             if (i.pretTotal <= 0)
             {
-                Console.WriteLine($"Atenție: Preț total invalid pentru clientul {i.User.Nume} cu mașina {i.masina.Marca}");
+                Console.WriteLine($"Atentie: Pret total invalid pentru clientul {i.User.Nume} cu masina {i.masina.Marca}");
             }
         }
 
@@ -125,7 +125,7 @@ public class Inchirieri
             NumarInmatriculare = i.masina.NumarInmatriculare,
             DataInceput = i.InceputInchiriere.ToString(),
             DataSfarsit = i.FinalInchiriere.ToString(),
-            PretTotal = i.pretTotal // Păstrăm prețul existent
+            PretTotal = i.pretTotal
         }).ToList();
 
         var options = new JsonSerializerOptions

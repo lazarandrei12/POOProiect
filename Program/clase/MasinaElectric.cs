@@ -36,7 +36,7 @@ public class MasinaElectric : Masina
         Console.WriteLine("Introdu numarul de inmatriculare: ");
         string numarInmatriculare = Console.ReadLine();
 
-        Console.WriteLine("Este mașina valabilă pentru închiriere? (true/false): ");
+        Console.WriteLine("Este masina valabila pentru inchiriere? (true/false): ");
         bool valabilitate;
         while (!bool.TryParse(Console.ReadLine(), out valabilitate))
         {
