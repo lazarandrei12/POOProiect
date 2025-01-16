@@ -314,8 +314,43 @@ class Program
                         Console.WriteLine("Clientul nu a fost găsit");
                     }
                     break;
+                case "7":
+                    Console.WriteLine("Introduceti data pentru care doriti sa aflati castigurile(format: YYYY-MM-DD): ");
+                    string dataString = Console.ReadLine();
+                    DateOnly DataZiSpecifica;
+                    while (!DateOnly.TryParse(dataString, out DataZiSpecifica))
+                    {
+                        Console.WriteLine("Format invalid!");
+                        Console.WriteLine("Introduceti din nou data");
+                        dataString = Console.ReadLine();
+                    }
+                    var Active = companie1.inchiriate.Where(i=> i.InceputInchiriere <= DataZiSpecifica && DataZiSpecifica <= i.FinalInchiriere).ToList();
+                    if (Active.Count == 0)
+                    {
+                        Console.WriteLine($"Nu exista incirieri pentru data {DataZiSpecifica}");
+                    }
+
+                    double castigtotal = 0;
+                    Console.WriteLine($"Inchirieri active si castiguri pentru data: {DataZiSpecifica}");
+    
+                    foreach (var inchirie in Active)
+                    {
+                        double CostZilnic = inchirie.masina.CostInchirierePeZi();
+                        castigtotal += CostZilnic;
+                    }
+
+                    Console.WriteLine($"Castig total pentru data {DataZiSpecifica}: {castigtotal} lei");
+                    break;
+                case "8":
+                    exit = true;
+                    break;
+                    
+                    default:
+                        Console.WriteLine("Optiune incorecta!");
+                        break;
             }
         }
+        
         static void SalveazaMasiniInFisier(List<Masina> masini)
         {
             List<Masina> masiniFaraDuplicate = masini

@@ -9,4 +9,12 @@
         <RootNamespace>proiect</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Content Include="bin\Debug\net9.0\proiect.runtimeconfig.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="bin\Debug\net9.0\users.json" />
+    </ItemGroup>
+
 </Project>
