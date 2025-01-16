@@ -87,6 +87,7 @@ public class User
     }
     public void Login()
     {
+        IncarcaUseriDinFisier();
         Console.WriteLine("Introduceti username: ");
         string username = Console.ReadLine();
         Console.WriteLine("Introduceti parola: ");
@@ -99,15 +100,20 @@ public class User
             return;
         }
 
-        foreach (var user in users)
+        var userCurent = users.FirstOrDefault(u => 
+            u.UsernameClient == username && u.ParolaClient == parola);
+
+        if (userCurent != null)
         {
-            if (user.UsernameClient == username && user.ParolaClient == parola)
-            {
-                Console.WriteLine($"Ai intrat in cont! {user.UsernameClient} ");
-                IsAdmin = false;
-                Logat = true;
-                return;
-            }
+            Console.WriteLine($"Ai intrat in cont! {userCurent.UsernameClient}");
+            this.UsernameClient = userCurent.UsernameClient;
+            this.ParolaClient = userCurent.ParolaClient;
+            this.Nume = userCurent.Nume;
+            this.Cnp = userCurent.Cnp;
+            this.IsAdmin = userCurent.IsAdmin;
+            this.IstoricInchirieri = userCurent.IstoricInchirieri;
+            this.Logat = true;
+            return;
         }
 
         Console.WriteLine("Username sau parola incorecte ");
