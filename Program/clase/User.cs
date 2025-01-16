@@ -18,6 +18,7 @@ public class User
     public string ParolaClient { get; set; }
     public string Nume { get; set; }
     public string Cnp { get; set; }
+    public bool Daune { get; set; } = false;
     public bool IsAdmin { get; set; }
     [JsonIgnore]
     public bool Logat { get; set; }
@@ -54,6 +55,7 @@ public class User
                         ParolaClient = dto.ParolaClient,
                         Nume = dto.Nume,
                         Cnp = dto.Cnp,
+                        Daune = dto.Daune,
                         IsAdmin = dto.IsAdmin,
                         IstoricInchirieri = dto.IstoricInchirieri.Select(i => new Inchirieri(
                             new User { Nume = i.NumeClient, UsernameClient = i.UsernameClient },
@@ -91,6 +93,7 @@ public class User
             ParolaClient = u.ParolaClient,
             Nume = u.Nume,
             Cnp = u.Cnp,
+            Daune = u.Daune,
             IsAdmin = u.IsAdmin,
             IstoricInchirieri = u.IstoricInchirieri.Select(i => new InchiriereDTO
             {
@@ -161,6 +164,7 @@ public class User
         public string ParolaClient { get; set; }
         public string Nume { get; set; }
         public string Cnp { get; set; }
+        public bool Daune { get; set; }
         public bool IsAdmin { get; set; }
         public List<InchiriereDTO> IstoricInchirieri { get; set; } = new List<InchiriereDTO>();
     }

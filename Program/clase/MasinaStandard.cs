@@ -8,7 +8,7 @@ public class MasinaStandard : Masina
 {
     public MasinaStandard(string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza) : base(marca, model, anDeFabricatie, kilometraj, numarInmatriculare, valabilitate, costBaza) {}
     
-    public override string TypeDiscriminator => "MasinaStandard";
+    public override string TypeDiscriminator { get; set; } = "MasinaStandard";
     public override double CostInchirierePeZi()
     {
         return CostBaza;

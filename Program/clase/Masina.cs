@@ -17,7 +17,7 @@ public abstract class Masina
     public bool Valabilitate { get; set; }
     public int CostBaza { get; private set; }
     [JsonIgnore] 
-    public virtual string TypeDiscriminator => "Masina";
+    public virtual string TypeDiscriminator { get; set; }
 
     public Masina (string marca, string model, int anDeFabricatie, int kilometraj, string numarInmatriculare, bool valabilitate, int costBaza)
     {

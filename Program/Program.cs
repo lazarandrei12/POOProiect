@@ -78,7 +78,7 @@ class Program
             Console.WriteLine("1.Vezi masini pt inchiriere");
             Console.WriteLine("2.Log in/Sign in");
             Console.WriteLine("3.Pentru Adminisrator");
-            Console.WriteLine("4.Petru Client");
+            Console.WriteLine("4.Pentru Client");
             Console.WriteLine("5.Vizualizare istoric inchirieri ale companiei");
             Console.WriteLine("6.Vizualizare istoric inchirieri client");
             Console.WriteLine("7.Vizualizare castiguri");
@@ -215,6 +215,11 @@ class Program
                             }
                             break;
                         case "2":
+                            if (user.Daune)
+                            {
+                                Console.WriteLine("Accesul la închirierea unei mașini este interzis pentru dumneavoastră, deoarece ați cauzat daune în trecut.");
+                                break;
+                            }
                             Console.WriteLine("Selectati numarul masinii pe care vreti sa o inchiriati ");
                             int numarulMasinii;
                             if (int.TryParse(Console.ReadLine(), out numarulMasinii))
@@ -238,7 +243,6 @@ class Program
                                             companie1.AdaugaInchiriere(inchiriereNoua);
                                             
                                             user.AdaugaIstoricInchirieri(inchiriereNoua);
-                                            Console.WriteLine($"{inchiriereNoua.pretTotal}...{inchiriereNoua.DurataInchirirere()}...");
                                             Console.WriteLine("Istoric înainte de salvare:");
                                             foreach (var inchiriere in user.IstoricInchirieri)
                                             {
@@ -246,9 +250,9 @@ class Program
                                             }
                                             User.SalveazaUseriInFisier();
                                             
-                                            var inchirieriExistente = Inchirieri.IncarcaInchirieriDinFisier();
-                                            inchirieriExistente.Add(inchiriereNoua);
-                                            Inchirieri.SalveazaInchirieriInFisier(inchirieriExistente);
+                                            var inchirieriExistenteV2 = Inchirieri.IncarcaInchirieriDinFisier();
+                                            inchirieriExistenteV2.Add(inchiriereNoua);
+                                            Inchirieri.SalveazaInchirieriInFisier(inchirieriExistenteV2);
                                             
                                             Console.WriteLine("Vehicul închiriat cu succes!");
                                         }
@@ -271,6 +275,50 @@ class Program
                             {
                                 Console.WriteLine("Vă rugăm introduceți un număr valid!");
                             }
+                            break;
+                        
+                        case "3":
+                            Console.WriteLine("Introduceți numărul de înmatriculare al mașinii pe care doriți să o returnați:");
+                            string numarInmatriculare = Console.ReadLine();
+                            
+                            var inchiriereaGasita = user.IstoricInchirieri.FirstOrDefault(i =>
+                                i.masina.NumarInmatriculare.Equals(numarInmatriculare, StringComparison.OrdinalIgnoreCase));
+
+                            if (inchiriereaGasita == null)
+                            {
+                                Console.WriteLine("Nu aveți închirierea acestei mașini sau mașina nu există.");
+                                break;
+                            }
+
+                            var masinaDeReturnat = masini.FirstOrDefault(m =>
+                                m.NumarInmatriculare.Equals(numarInmatriculare, StringComparison.OrdinalIgnoreCase));
+
+                            if (masinaDeReturnat == null)
+                            {
+                                Console.WriteLine("Mașina cu acest număr de înmatriculare nu a fost găsită.");
+                                break;
+                            }
+
+                            if (masinaDeReturnat.Valabilitate)
+                            {
+                                Console.WriteLine("Această mașină este deja returnată și disponibilă pentru închiriere.");
+                                break;
+                            }
+
+                            masinaDeReturnat.Valabilitate = true;
+                            SalveazaMasiniInFisier(masini);
+
+                            Console.WriteLine("Mașina a fost returnată cu succes.");
+                            Console.WriteLine("A existat vreo daună? (Da/Nu)");
+
+                            string raspunsDauna = Console.ReadLine()?.ToLower();
+                            if (raspunsDauna == "da")
+                            {
+                                user.Daune = true;
+                                Console.WriteLine("Utilizatorul a fost marcat ca având daune și nu mai poate închiria alte mașini.");
+                            }
+                            
+                            User.SalveazaUseriInFisier();
                             break;
                             
                     }
@@ -316,31 +364,52 @@ class Program
                     }
                     break;
                 case "7":
-                    Console.WriteLine("Introduceti data pentru care doriti sa aflati castigurile(format: YYYY-MM-DD): ");
+                    Console.WriteLine("Introduceți data pentru care doriți să calculați costurile de închiriere (format: YYYY-MM-DD): ");
                     string dataString = Console.ReadLine();
-                    DateOnly DataZiSpecifica;
-                    while (!DateOnly.TryParse(dataString, out DataZiSpecifica))
+
+                    if (!DateOnly.TryParse(dataString, out DateOnly dataCautata))
                     {
-                        Console.WriteLine("Format invalid!");
-                        Console.WriteLine("Introduceti din nou data");
-                        dataString = Console.ReadLine();
-                    }
-                    var Active = companie1.inchiriate.Where(i=> i.InceputInchiriere <= DataZiSpecifica && DataZiSpecifica <= i.FinalInchiriere).ToList();
-                    if (Active.Count == 0)
-                    {
-                        Console.WriteLine($"Nu exista incirieri pentru data {DataZiSpecifica}");
+                        Console.WriteLine("Format invalid pentru dată!");
+                        break;
                     }
 
-                    double castigtotal = 0;
-                    Console.WriteLine($"Inchirieri active si castiguri pentru data: {DataZiSpecifica}");
+                    // Încarcă toate închirierile din fișier
+                    var inchirieriExistente = Inchirieri.IncarcaInchirieriDinFisier();
 
-                    foreach (var inchirie in Active)
+                    // Filtrare: Găsește închirierile active pentru data specificată
+                    var inchirieriActive = inchirieriExistente
+                        .Where(i => i.InceputInchiriere <= dataCautata && dataCautata <= i.FinalInchiriere)
+                        .ToList();
+
+                    if (!inchirieriActive.Any())
                     {
-                        double CostZilnic = inchirie.masina.CostInchirierePeZi();
-                        castigtotal += CostZilnic;
+                        Console.WriteLine($"Nu există închirieri active pentru data {dataCautata}.");
+                        break;
                     }
 
-                    Console.WriteLine($"Castig total pentru data {DataZiSpecifica}: {castigtotal} lei");
+                    // Calculează suma totală a costurilor pe zi pentru închirierile active
+                    double sumaTotala = 0;
+                    foreach (var inchiriere in inchirieriActive)
+                    {
+                        // Calculăm durata închirierii
+                        int durata = (inchiriere.FinalInchiriere.DayNumber - inchiriere.InceputInchiriere.DayNumber);
+
+                        // Verificăm dacă durata este validă
+                        if (durata > 0)
+                        {
+                            double costPeZi = inchiriere.pretTotal / durata;
+                            sumaTotala += costPeZi;
+
+                            // Debugging: Afișăm detalii pentru fiecare închiriere
+                            Console.WriteLine($"Inchiriere: {inchiriere.User.Nume}, Mașină: {inchiriere.masina.Marca}, Cost/zi: {costPeZi} lei.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Inchirierea cu mașina {inchiriere.masina.Marca} are o durată invalidă.");
+                        }
+                    }
+
+                    Console.WriteLine($"Suma totală a costurilor de închiriere pe zi pentru data {dataCautata}: {sumaTotala} lei.");
                     break;
                 case "8":
                     exit = true;
@@ -353,31 +422,80 @@ class Program
         }
         static void SalveazaMasiniInFisier(List<Masina> masini)
         {
-            List<Masina> masiniFaraDuplicate = masini
-                .GroupBy(m => m.NumarInmatriculare)
-                .Select(g => g.First()) 
-                .ToList();
-
             var options = new JsonSerializerOptions
             {
-                Converters = { new MasinaJsonConverter() },
                 WriteIndented = true
             };
-            string json = JsonSerializer.Serialize(masiniFaraDuplicate, options);
-            File.WriteAllText(masinaFilePath, json);
+
+            // Creăm o listă de obiecte anonime care includ discriminatorul
+            var masiniPentruSalvare = masini.Select(masina =>
+            {
+                if (masina is MasinaStandard standard)
+                {
+                    return new
+                    {
+                        TypeDiscriminator = "MasinaStandard",
+                        standard.Marca,
+                        standard.Model,
+                        standard.AnDeFabricatie,
+                        standard.Kilometraj,
+                        standard.NumarInmatriculare,
+                        standard.Valabilitate,
+                        standard.CostBaza
+                    };
+                }
+                else if (masina is MasinaElectric electric)
+                {
+                    return new
+                    {
+                        TypeDiscriminator = "MasinaElectric",
+                        electric.Marca,
+                        electric.Model,
+                        electric.AnDeFabricatie,
+                        electric.Kilometraj,
+                        electric.NumarInmatriculare,
+                        electric.Valabilitate,
+                        electric.CostBaza
+                    };
+                }
+
+                throw new InvalidOperationException("Tip necunoscut de mașină.");
+            }).ToList();
+
+            // Serializăm mașinile cu discriminator
+            string json = JsonSerializer.Serialize(masiniPentruSalvare, options);
+            File.WriteAllText("masini.json", json);
         }
 
         static List<Masina> IncarcaMasiniDinFisier()
         {
-            if (File.Exists(masinaFilePath))
+            if (File.Exists("masini.json"))
             {
-                string json = File.ReadAllText(masinaFilePath);
+                string json = File.ReadAllText("masini.json");
                 var options = new JsonSerializerOptions
                 {
-                    Converters = { new MasinaJsonConverter() },
                     WriteIndented = true
                 };
-                return JsonSerializer.Deserialize<List<Masina>>(json, options) ?? new List<Masina>();
+
+                var masiniDTO = JsonSerializer.Deserialize<List<JsonElement>>(json, options);
+
+                if (masiniDTO != null)
+                {
+                    var masini = new List<Masina>();
+                    foreach (var masina in masiniDTO)
+                    {
+                        string typeDiscriminator = masina.GetProperty("TypeDiscriminator").GetString();
+                        if (typeDiscriminator == "MasinaStandard")
+                        {
+                            masini.Add(masina.Deserialize<MasinaStandard>(options));
+                        }
+                        else if (typeDiscriminator == "MasinaElectric")
+                        {
+                            masini.Add(masina.Deserialize<MasinaElectric>(options));
+                        }
+                    }
+                    return masini;
+                }
             }
             return new List<Masina>();
         }
