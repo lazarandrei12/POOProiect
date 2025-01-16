@@ -25,13 +25,20 @@ public class Inchirieri
     public DateOnly InceputInchiriere;
     public DateOnly FinalInchiriere;
     public double pretTotal;
-    public Inchirieri(User user, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere)
+    public Inchirieri(User user, Masina masina, DateOnly inceputInchiriere, DateOnly finalInchiriere, double pretTotal = -1)
     {
         this.User = user;
         this.masina = masina;
         this.InceputInchiriere = inceputInchiriere;
         this.FinalInchiriere = finalInchiriere;
-        this.pretTotal = masina.CostInchirierePeZi() * DurataInchirirere();
+        if (pretTotal >= 0)
+        {
+            this.pretTotal = pretTotal;
+        }
+        else
+        {
+            this.pretTotal = masina.CostInchirierePeZi() * DurataInchirirere();
+        }
     }
     
     public int DurataInchirirere()
@@ -86,7 +93,8 @@ public class Inchirieri
                         new User { Nume = dto.NumeClient, UsernameClient = dto.UsernameClient },
                         new MasinaStandard(dto.MarcaMasina, dto.ModelMasina, 0, 0, dto.NumarInmatriculare, false, 0),
                         DateOnly.Parse(dto.DataInceput),
-                        DateOnly.Parse(dto.DataSfarsit)
+                        DateOnly.Parse(dto.DataSfarsit),
+                        dto.PretTotal // Transmitem pretTotal direct ca al cincilea parametru
                     )).ToList();
                 }
             }
@@ -100,16 +108,24 @@ public class Inchirieri
 
     public static void SalveazaInchirieriInFisier(List<Inchirieri> inchirieri)
     {
+        foreach (var i in inchirieri)
+        {
+            if (i.pretTotal <= 0)
+            {
+                Console.WriteLine($"Atenție: Preț total invalid pentru clientul {i.User.Nume} cu mașina {i.masina.Marca}");
+            }
+        }
+
         var inchirieriDTO = inchirieri.Select(i => new InchiriereDTO
         {
-            NumeClient = i.User.Nume,
-            UsernameClient = i.User.UsernameClient,
+            NumeClient = i.User?.Nume ?? "Necunoscut",
+            UsernameClient = i.User?.UsernameClient ?? "Necunoscut",
             MarcaMasina = i.masina.Marca,
             ModelMasina = i.masina.Model,
             NumarInmatriculare = i.masina.NumarInmatriculare,
             DataInceput = i.InceputInchiriere.ToString(),
             DataSfarsit = i.FinalInchiriere.ToString(),
-            PretTotal = i.pretTotal
+            PretTotal = i.pretTotal // Păstrăm prețul existent
         }).ToList();
 
         var options = new JsonSerializerOptions

@@ -59,7 +59,8 @@ public class User
                             new User { Nume = i.NumeClient, UsernameClient = i.UsernameClient },
                             new MasinaStandard(i.MarcaMasina, i.ModelMasina, 0, 0, i.NumarInmatriculare, true, 0),
                             DateOnly.Parse(i.DataInceput),
-                            DateOnly.Parse(i.DataSfarsit)
+                            DateOnly.Parse(i.DataSfarsit),
+                            i.PretTotal // Păstrează valoarea `pretTotal` din JSON
                         )).ToList()
                     }).ToList();
                 }
